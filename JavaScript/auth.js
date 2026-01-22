@@ -19,6 +19,38 @@ const firebaseApp = !firebase.apps || firebase.apps.length === 0
 const db = firebaseApp.firestore();
 const auth = firebaseApp.auth();
 
+const googleProvider = new firebase.auth.GoogleAuthProvider();
+//Google Sign-In
+
+const googleLogin = async() =>{
+  try {
+    const result = await auth.signInWithPopup(googleProvider);
+    const user = result.user;
+
+    const userRef = db.collection("users").doc(user.uid);
+    const snap = await userRef.get();
+
+    if(!snap.exists){
+      await userRef.set({
+        name: user.displayName || " ",
+        email: user.email,
+        role: "patient",
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        provider: "google",
+        profileCompleted: false
+  });
+    }
+    window.location.href = "complete_profile.html";
+  }catch(error){
+    alert(error.message);
+  }
+}
+
+const googleBtn = document.getElementById("googleSignIn");
+if(googleBtn){
+  googleBtn.addEventListener("click", googleLogin);
+}
+
 // Register (Auth + Firestore)
 const register = () => {
   const name = (document.getElementById("name") || {}).value || "";
@@ -26,6 +58,7 @@ const register = () => {
   const password = (document.getElementById("password") || {}).value || "";
   const contact = (document.getElementById("contact") || {}).value || "";
   const emergencyContact = (document.getElementById("emergencyContact") || {}).value || "";
+  const role = document.getElementById("role")?.value || "Patient";
 
   auth.createUserWithEmailAndPassword(email, password)
     .then((userCredential) => {
@@ -36,6 +69,7 @@ const register = () => {
         email,
         contact,
         emergencyContact,
+        role,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
     })
