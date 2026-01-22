@@ -22,7 +22,7 @@ auth.onAuthStateChanged(async (user) => {
 
   // If already completed → block access
   if (snap.exists && snap.data().profileComplete === true) {
-    window.location.href = "patient_dashboard.html";
+    window.location.href = "index.html";
   }
 });
 
