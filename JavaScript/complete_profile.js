@@ -1,3 +1,13 @@
+const firebaseApp = !firebase.apps || firebase.apps.length === 0
+  ? firebase.initializeApp({
+    apiKey: "AIzaSyAwl22tT7kJD1U0toxE0WckzOxHAao9Nzg",
+    authDomain: "emergency-healthcare-17c29.firebaseapp.com",
+    projectId: "emergency-healthcare-17c29",
+    storageBucket: "emergency-healthcare-17c29.firebasestorage.app",
+    messagingSenderId: "210921508011",
+    appId: "1:210921508011:web:8308e17f37863a40727bee"
+  })
+  : firebase.app();
 const auth = firebase.auth();
 const db = firebase.firestore();
 
@@ -32,11 +42,11 @@ document
     const user = auth.currentUser;
     if (!user) return;
 
-    await db.collection("users").doc(user.uid).update({
+    await db.collection("users").doc(user.uid).set({
       contact,
       emergencyContact,
       profileComplete: true
-    });
+    }, {merge: true});
 
     window.location.href = "patient_dashboard.html";
   });
