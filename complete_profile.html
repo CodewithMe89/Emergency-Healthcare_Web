@@ -4,10 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Complete Profile</title>
+<script src="https://www.gstatic.com/firebasejs/12.4.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.4.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore-compat.js"></script>
+  <link rel="stylesheet" href="css/complete_profile.css">
 </head>
 <body>
-    <div>
-        Complete Your profile ....
+    <div class="container">
+        <h2>Complete Your Profile</h2>
+        <form id="completeProfileForm">
+            <input type="text" id="contact" placeholder="Contact Number" pattern="(\+91)?[0-9]{10}" required>
+            <input type="tel" id="emergency" placeholder="Emergency Contact" pattern="(\+91)?[0-9]{10}" required>
+
+            <button type="submit">Continue</button>
+        </form>
     </div>
+    <script src="JavaScript/complete_profile.js"></script>
 </body>
 </html>
