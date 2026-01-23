@@ -32,7 +32,7 @@
 
   function triggerSOS() {
     closeModal();
-    window.location.href = 'tel:102';
+    window.location.href = 'tel:112';
   }
 
   sosBtn.addEventListener('click', (e) => {
