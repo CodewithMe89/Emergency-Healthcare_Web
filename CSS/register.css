@@ -47,7 +47,7 @@ h2 {
     margin-bottom: 20px;
 }
 
-input {
+input{
     width: 100%;
     padding: 12px;
     background: #eee;
@@ -90,4 +90,20 @@ p a {
 
 p a:hover {
     text-decoration: underline;
+}
+.password-wrapper{
+    position: relative;
+}
+.password-wrapper input {
+    width: 100%;
+    padding-right: 40px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 35%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    user-select: none;
 }
