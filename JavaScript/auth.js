@@ -160,3 +160,22 @@ auth.onAuthStateChanged(async (user) => {
     alert(e.message);
   }
 });
+
+document.addEventListener("click", (e) => {
+  if(!e.target.classList.contains("toggle-password")) return;
+
+  const inputId = e.target.dataset.target;
+  const input = document.getElementById(inputId);
+
+  if(!input) return;
+
+  if(input.type === "password"){
+    input.type = "text";
+    e.target.textContent = "Visibility_Off";
+} else{
+  input.type = "password";
+  e.target.textContent = "Visibility";
+}
+})
+
+
