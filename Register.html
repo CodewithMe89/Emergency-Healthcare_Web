@@ -35,13 +35,14 @@
                 <input type="tel" id="emergencyContact" pattern="(\+91)?[0-9]{10}"
                     placeholder="Emergency Contact Number" required>
                 <select name="role" id="role">
+                    <option value="">--Choose a role--</option>
                     <option value="patient">User</option>
                     <option value="ambulanceDriver">Driver</option>
                     <option value="admin">Admin</option>
                 </select>
 
                 <button type="submit">Register</button>
-                <button type="button" id="googleSignIn" class="google-btn">Continue with google</button>
+                    <button type="button" id="googleSignIn" class="google-btn">Continue with google</button>
                 <p>Already have an account? <a href="#" onclick="showform('login-form')">Login</a></p>
             </form>
         </div>
