@@ -133,6 +133,13 @@
 }
 
 
+.image-preview img {
+  max-width: 120px;
+  margin-top: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
 /* Responsive */
 @media (max-width: 640px) {
   #report-others {
