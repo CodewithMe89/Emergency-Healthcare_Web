@@ -1,3 +1,5 @@
+// ================= IMAGE PREVIEW =================
+
 const imageInput = document.getElementById("reportImage");
 const imagePreview = document.getElementById("imagePreview");
 
@@ -11,12 +13,14 @@ imageInput?.addEventListener("change", () => {
   imagePreview.appendChild(img);
 });
 
+// ================= SOS MODAL =================
+
 (function () {
-  const sosBtn = document.getElementById('sosBtn');
-  const sosModal = document.getElementById('sosModal');
-  const sosCountdown = document.getElementById('sosCountdown');
-  const cancelSosBtn = document.getElementById('cancelSosBtn');
-  const sendNowBtn = document.getElementById('sendNowBtn');
+  const sosBtn = document.getElementById("sosBtn");
+  const sosModal = document.getElementById("sosModal");
+  const sosCountdown = document.getElementById("sosCountdown");
+  const cancelSosBtn = document.getElementById("cancelSosBtn");
+  const sendNowBtn = document.getElementById("sendNowBtn");
 
   if (!sosBtn || !sosModal) return;
 
@@ -26,10 +30,12 @@ imageInput?.addEventListener("change", () => {
   function openModal() {
     remaining = 15;
     sosCountdown.textContent = String(remaining);
-    sosModal.style.display = 'flex';
+    sosModal.style.display = "flex";
+
     timerId = setInterval(() => {
       remaining -= 1;
       sosCountdown.textContent = String(remaining);
+
       if (remaining <= 0) {
         clearInterval(timerId);
         triggerSOS();
@@ -38,97 +44,119 @@ imageInput?.addEventListener("change", () => {
   }
 
   function closeModal() {
-    sosModal.style.display = 'none';
+    sosModal.style.display = "none";
     if (timerId) clearInterval(timerId);
     timerId = null;
   }
 
   function triggerSOS() {
     closeModal();
-    window.location.href = 'tel:112';
+    window.location.href = "tel:112";
   }
 
-  sosBtn.addEventListener('click', (e) => {
+  sosBtn.addEventListener("click", (e) => {
     e.preventDefault();
     openModal();
   });
 
-  if (cancelSosBtn) cancelSosBtn.addEventListener('click', closeModal);
-  if (sendNowBtn) sendNowBtn.addEventListener('click', triggerSOS);
+  cancelSosBtn?.addEventListener("click", closeModal);
+  sendNowBtn?.addEventListener("click", triggerSOS);
 
-  sosModal.addEventListener('click', (e) => {
+  sosModal.addEventListener("click", (e) => {
     if (e.target === sosModal) closeModal();
   });
 })();
 
-//Report for someone else javascript
+// ================= CLOUDINARY UPLOAD =================
+
+async function uploadImageToCloudinary(file) {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "accident_reports");
+
+  const response = await fetch(
+    "https://api.cloudinary.com/v1_1/dunewrawd/image/upload",
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
+
+  const data = await response.json();
+
+  if (!data.secure_url) {
+    throw new Error("Cloudinary upload failed");
+  }
+
+  return data.secure_url;
+}
+
+// ================= REPORT EMERGENCY FORM =================
 
 (function () {
-  const form = document.getElementById('report-form');
+  const form = document.getElementById("report-form");
   if (!form) return;
 
-  const useMyLocBtn = document.getElementById('useMyLocation');
-  const addressInput = document.getElementById('reportAddress');
-  const coordHelper = document.getElementById('coordHelper');
-  const descInput = document.getElementById('reportDesc');
+  const useMyLocBtn = document.getElementById("useMyLocation");
+  const addressInput = document.getElementById("reportAddress");
+  const coordHelper = document.getElementById("coordHelper");
+  const descInput = document.getElementById("reportDesc");
 
-  // Try geolocation for convenience
-  useMyLocBtn?.addEventListener('click', () => {
+  // Location button
+  useMyLocBtn?.addEventListener("click", () => {
     if (!navigator.geolocation) {
-      alert('Geolocation not supported.');
+      alert("Geolocation not supported.");
       return;
     }
+
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const { latitude, longitude } = pos.coords;
-        coordHelper.textContent = `Coordinates: ${latitude.toFixed(5)}, ${longitude.toFixed(5)}`;
-        // Leave address manual; you can reverse‑geocode later server‑side if needed
+        coordHelper.textContent = `Coordinates: ${latitude.toFixed(
+          5
+        )}, ${longitude.toFixed(5)}`;
       },
-      (err) => alert('Could not get location: ' + err.message),
+      (err) => alert("Could not get location: " + err.message),
       { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
     );
   });
 
-  // Submit without login
-  form.addEventListener('submit', async (e) => {
+  // Submit report
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const payload = {
       address: addressInput.value.trim(),
       description: descInput.value.trim(),
       coords: coordHelper.textContent || null,
-      source: 'public-report',
+      source: "public-report",
       createdAt: Date.now(),
-      status: 'new',
-      imageUrl: null
+      status: "new",
+      imageUrl: null,
     };
 
-    let imageUrl = null;
-     
-    //upload image if exists
+    // Upload image if selected
     if (imageInput && imageInput.files.length > 0) {
-  const file = imageInput.files[0];
-
-  if (window.firebase && firebase.apps.length > 0) {
-    const storage = firebase.storage();
-    const fileRef = storage.ref(`reports/${Date.now()}_${file.name}`);
-
-    await fileRef.put(file);
-    payload.imageUrl = await fileRef.getDownloadURL();
-  }
-}
-
-    //Save report
-
-    if(window.firebase && firebase.apps && firebase.apps.length >0){
-      try{
-        const app = firebase.app();
-        const db = app.firestore();
-        await db.collection('incidents').add(payload);
-        alert('Report sent successfully');
-      }catch(err){
-        alert('Failed to sent report.');  
+      try {
+        payload.imageUrl = await uploadImageToCloudinary(
+          imageInput.files[0]
+        );
+      } catch (err) {
+        alert("Image upload failed: " + err.message);
+        return;
       }
+    }
+
+    // Save to Firestore
+    try {
+      const db = firebase.firestore();
+      await db.collection("incidents").add(payload);
+
+      alert("Report sent successfully!");
+      form.reset();
+      imagePreview.innerHTML = "";
+    } catch (err) {
+      alert("Failed to send report: " + err.message);
     }
   });
 })();
