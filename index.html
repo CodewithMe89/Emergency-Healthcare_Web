@@ -8,8 +8,9 @@
     <link rel="stylesheet" href="CSS/style.css">
     <link rel="stylesheet" href="CSS/report.css">
     <script src="https://www.gstatic.com/firebasejs/12.4.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/12.4.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.4.0/firebase-storage-compat.js"></script>
 </head>
 
 <body>
@@ -56,10 +57,11 @@
           <label>Describe condition</label>
           <textarea id="reportDesc" rows="3" placeholder="Eg. bike accident, bleeding, unconscious" required></textarea>
         </div>
-
         <div class="form-group">
-          <label>Your phone (optional)</label>
-          <input type="tel" id="reportPhone" placeholder="+91XXXXXXXXXX" pattern="(\+\d{1,3})?[0-9]{10}">
+          <label for="reportImage">Upload File</label>
+          <input type="file" id="reportImage" accept="image/*">
+
+          <div id="imagePreview" class="image-preview"></div>
         </div>
 
         <button type="submit" id="submitReport" class="btn-primary">Notify Services</button>
@@ -79,7 +81,7 @@
       </div>
     </div>
   </div>
-
+  <script src="JavaScript/firebase.js"></script>
   <script src="JavaScript/auth.js"></script>
   <script src="JavaScript/script.js"></script>
 </body>
