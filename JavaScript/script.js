@@ -1,3 +1,16 @@
+const imageInput = document.getElementById("reportImage");
+const imagePreview = document.getElementById("imagePreview");
+
+imageInput?.addEventListener("change", () => {
+  imagePreview.innerHTML = "";
+  const file = imageInput.files[0];
+  if (!file) return;
+
+  const img = document.createElement("img");
+  img.src = URL.createObjectURL(file);
+  imagePreview.appendChild(img);
+});
+
 (function () {
   const sosBtn = document.getElementById('sosBtn');
   const sosModal = document.getElementById('sosModal');
@@ -58,7 +71,6 @@
   const addressInput = document.getElementById('reportAddress');
   const coordHelper = document.getElementById('coordHelper');
   const descInput = document.getElementById('reportDesc');
-  const phoneInput = document.getElementById('reportPhone');
 
   // Try geolocation for convenience
   useMyLocBtn?.addEventListener('click', () => {
@@ -84,30 +96,39 @@
     const payload = {
       address: addressInput.value.trim(),
       description: descInput.value.trim(),
-      phone: phoneInput.value.trim() || null,
       coords: coordHelper.textContent || null,
       source: 'public-report',
       createdAt: Date.now(),
-      status: 'new'
+      status: 'new',
+      imageUrl: null
     };
 
-    // Optional: write to Firestore if sdk available on page
-    if (window.firebase && firebase.apps && firebase.apps.length > 0) {
-      try {
+    let imageUrl = null;
+     
+    //upload image if exists
+    if (imageInput && imageInput.files.length > 0) {
+  const file = imageInput.files[0];
+
+  if (window.firebase && firebase.apps.length > 0) {
+    const storage = firebase.storage();
+    const fileRef = storage.ref(`reports/${Date.now()}_${file.name}`);
+
+    await fileRef.put(file);
+    payload.imageUrl = await fileRef.getDownloadURL();
+  }
+}
+
+    //Save report
+
+    if(window.firebase && firebase.apps && firebase.apps.length >0){
+      try{
         const app = firebase.app();
         const db = app.firestore();
         await db.collection('incidents').add(payload);
-        alert('Report logged. Dialing services is available below.');
-      } catch (err) {
-        alert('Could not log report, but you can still call emergency numbers.');
+        alert('Report sent successfully');
+      }catch(err){
+        alert('Failed to sent report.');  
       }
-    } else {
-      // If Firebase not loaded on index, just proceed with calling flow
-      alert('Ready to notify services.');
     }
-
-    // Offer calls immediately (works on mobile)
-    // For desktop, these links may do nothing unless a call app is installed
-    document.getElementById('callAmbulance').click();
   });
 })();
