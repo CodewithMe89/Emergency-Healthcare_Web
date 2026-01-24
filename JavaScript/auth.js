@@ -4,20 +4,8 @@ function showform(formId) {
   if (target) target.classList.add("active");
 }
 
-// Firebase initialization (avoid multiple inits)
-const firebaseApp = !firebase.apps || firebase.apps.length === 0
-  ? firebase.initializeApp({
-    apiKey: "AIzaSyAwl22tT7kJD1U0toxE0WckzOxHAao9Nzg",
-    authDomain: "emergency-healthcare-17c29.firebaseapp.com",
-    projectId: "emergency-healthcare-17c29",
-    storageBucket: "emergency-healthcare-17c29.firebasestorage.app",
-    messagingSenderId: "210921508011",
-    appId: "1:210921508011:web:8308e17f37863a40727bee"
-  })
-  : firebase.app();
-
-const db = firebaseApp.firestore();
 const auth = firebaseApp.auth();
+const db = firebaseApp.firestore(); 
 
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 //Google Sign-In
