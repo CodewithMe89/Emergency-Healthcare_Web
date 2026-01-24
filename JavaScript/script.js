@@ -1,3 +1,6 @@
+if(!firebase.apps.length){
+  alert("firebase not initialized properly");
+}
 // ================= IMAGE PREVIEW =================
 
 const imageInput = document.getElementById("reportImage");
