@@ -11,11 +11,12 @@
 </head>
 <body>
     <div class="container">
+        <form id="completeProfileForm" class="form-box">
         <h2>Complete Your Profile</h2>
-        <form id="completeProfileForm">
+        <label for="contact" class="required">Contact</label>
             <input type="text" id="contact" placeholder="Contact Number" pattern="(\+91)?[0-9]{10}" required>
+            <label for="emergencyContact" class="required">Emergency Contact</label>
             <input type="tel" id="emergencyContact" placeholder="Emergency Contact" pattern="(\+91)?[0-9]{10}" required>
-
             <button type="submit">Continue</button>
         </form>
     </div>
