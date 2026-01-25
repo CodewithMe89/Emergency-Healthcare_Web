@@ -23,24 +23,29 @@
         <div class="form-box active" id="register-form">
             <form action="">
                 <h2>Register</h2>
+                <label for="name" class="required">Name</label>
                 <input type="text" id="name" placeholder="Name" required>
+                <label for="email" class="required">Email</label>
                 <input type="email" placeholder="Email" id="email" required>
+                <label for="password" class="required">Password</label>
                 <div class="password-wrapper">
                     <input type="password"  id="password" placeholder="Password" required>
                     <span class="material-symbols-outlined toggle-password" data-target="password">
                          Visibility
                      </span>
                 </div>
+                <label for="contact" class="required">Contact</label>
                 <input type="text" id="contact" placeholder="Contact Number" pattern="(\+91)?[0-9]{10}" required>
+                <label for="emergencyContact" class="required">Emergency Contact</label>
                 <input type="tel" id="emergencyContact" pattern="(\+91)?[0-9]{10}"
                     placeholder="Emergency Contact Number" required>
-                <select name="role" id="role">
+                    <label for="role" class="required">Register As</label>
+                    <select name="role" id="role">
                     <option value="">--Choose a role--</option>
                     <option value="patient">User</option>
                     <option value="ambulanceDriver">Driver</option>
                     <option value="admin">Admin</option>
                 </select>
-
                 <button type="submit">Register</button>
                     <button type="button" id="googleSignIn" class="google-btn">Continue with google</button>
                 <p>Already have an account? <a href="#" onclick="showform('login-form')">Login</a></p>
@@ -49,7 +54,9 @@
         <div class="form-box " id="login-form">
             <form action="">
                 <h2>Login</h2>
+                <label for="loginEmail" class="required">Email</label>
                 <input type="email" id="loginEmail" placeholder="Enter Email" required>
+                <label for="loginPassword" class="required">Password</label>
                 <div class="password-wrapper">
                     <input type="password" id="loginPassword" placeholder="Enter Password" required>
                     <span class="material-symbols-outlined toggle-password" data-target="loginPassword">Visibility</span>
