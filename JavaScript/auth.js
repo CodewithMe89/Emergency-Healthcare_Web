@@ -4,8 +4,8 @@ function showform(formId) {
   if (target) target.classList.add("active");
 }
 
-const auth = firebaseApp.auth();
-const db = firebaseApp.firestore(); 
+const auth = firebase.auth();
+const db = firebase.firestore(); 
 
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 //Google Sign-In
