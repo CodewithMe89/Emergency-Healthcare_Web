@@ -25,10 +25,14 @@ const googleLogin = async() =>{
         role: "patient",
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         provider: "google",
-        profileCompleted: false
+        profileComplete: false
   });
     }
-    window.location.href = "complete_profile.html";
+    if(!snap.exists || snap.data().profileComplete === false){
+      window.location.href = "complete_profile.html";
+    }else{
+      window.location.href = "index.html";
+    }
   }catch(error){
     alert(error.message);
   }
@@ -46,7 +50,7 @@ const register = () => {
   const password = (document.getElementById("password") || {}).value || "";
   const contact = (document.getElementById("contact") || {}).value || "";
   const emergencyContact = (document.getElementById("emergencyContact") || {}).value || "";
-  const role = document.getElementById("role")?.value || "Patient";
+  const role = document.getElementById("role")?.value || "patient";
 
   auth.createUserWithEmailAndPassword(email, password)
     .then((userCredential) => {
@@ -160,7 +164,7 @@ document.addEventListener("click", (e) => {
 
   if(input.type === "password"){
     input.type = "text";
-    e.target.textContent = "Visibility_Off";
+    e.target.textContent = "Visibility_off";
 } else{
   input.type = "password";
   e.target.textContent = "Visibility";
