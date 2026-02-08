@@ -103,22 +103,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
 
-//pop-up
-
-auth.onAuthStateChanged(async (user)=>{
-  if(!user) return;
-
-  const snap = await db.collection('users').doc(user.uid).get();
-
-  if(!snap.exists) return;
-  
-  if(snap.data().profileComplete === false){
-    document
-    .getElementById("profileModal")
-    .classList.remove("hidden")
-
-  }
-})
 
 // Auth state → toggle UI on any page
 auth.onAuthStateChanged(async (user) => {
