@@ -80,10 +80,25 @@
       </div>
     </div>
   </div>
-  <script src="JavaScript/firebase.js"></script>
 
+  <div id="profileModal" class="modal hidden">
+    <div class="modal-box">
+      <h2>Complete Your profile</h2>
+      <form id="completeProfileForm">
+        <input type="tel" id="contact" placeholder="Contact Number" required>
+
+        <input type="tel" id="emergencyContact" placeholder="Emergency Contact" required>
+
+        <button type="submit">Save & Continue</button>
+      </form>
+
+    </div>
+  </div>
+
+  <script src="JavaScript/firebase.js"></script>
   <script src="JavaScript/auth.js"></script>
   <script src="JavaScript/script.js"></script>
+  <script src="JavaScript/saveProfileModal.js"></script>
 </body>
 
 </html>
