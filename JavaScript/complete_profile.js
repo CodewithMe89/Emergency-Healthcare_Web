@@ -21,6 +21,7 @@ auth.onAuthStateChanged(async (user) => {
   const snap = await userRef.get();
 
   // If already completed → block access
+
   if (snap.exists && snap.data().profileComplete === true) {
     window.location.href = "index.html";
   }
@@ -48,5 +49,5 @@ document
       profileComplete: true
     }, {merge: true});
 
-    window.location.href = "patient_dashboard.html";
+    window.location.href = "index.html";
   });
