@@ -28,12 +28,9 @@ const googleLogin = async() =>{
         profileComplete: false
   });
     }
-    if(!snap.exists || snap.data().profileComplete === false){
-      window.location.href = "complete_profile.html";
-    }else{
-      window.location.href = "index.html";
-    }
-  }catch(error){
+    window.location.href = "complete_profile.html"
+}
+catch(error){
     alert(error.message);
   }
 }
