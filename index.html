@@ -2,34 +2,51 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emergency-Heathcare_Web</title>
-    <link rel="stylesheet" href="CSS/style.css">
-    <link rel="stylesheet" href="CSS/report.css">
-    <script src="https://www.gstatic.com/firebasejs/12.4.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/12.4.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore-compat.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emergency-Heathcare_Web</title>
+  <link rel="stylesheet" href="CSS/style.css">
+  <link rel="stylesheet" href="CSS/report.css">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <script src="https://www.gstatic.com/firebasejs/12.4.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.4.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore-compat.js"></script>
 </head>
 
 <body>
   <header class="header">
-<div class="logo"><a href="index.html"><img src="Images/logo.png" alt="logo" /></a></div>
+    <div class="logo">
+      <a href="index.html"><img src="Images/logo.png" alt="logo" /></a>
+    </div>
     <nav>
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="Hospital.html">Hospitals</a></li>
         <li><a href="first_aid.html">First Aid</a></li>
-        <li><a href="Login.html" class="nav-login">Login</a></li>
-        <li><a href="Register.html" class="nav-register">Register</a></li>
-      </ul>
-      <div id="user-pill" class="user-pill" style="display:none;">
-        <button id="profileBtn" class="pill">
-          <span id="pillName">User</span>
-          <span id="pillEmail">email@example.com</span>
-        </button>
-        <button id="logoutBtn" class="logout-btn">Logout</button>
-      </div>
+      
+        <li class="nav-item auth-container">
+          <div class="profile-wrapper" id="profileWrapper" style="display: none;">
+            <div class="avatar" id="avatarCircle"></div>
+
+            <div class="dropdown-menu" id="dropdownMenu">
+              <div class="user-info">
+                <strong id="dropdownName"></strong>
+                <small id="dropdownEmail"></small>
+              </div>
+            <hr />
+            <a href="complete_profile.html">Profile</a>
+            <a href="#">Settings</a>
+            <button id="logoutBtn">Logout</button>
+            </div>
+          </div>
+
+          <div id="loginLinks">
+            <a href="Login.html">SignIn</a>
+            <a href="Register.html">SignUp</a>
+          </div>
+        </li>
+        </ul>
     </nav>
   </header>
 
