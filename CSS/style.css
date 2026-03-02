@@ -31,11 +31,9 @@ body {
   height: auto;
 }
 
-
-.nav-links{
+.nav-links {
   display: flex;
-  align-items: center;
-  gap: 20px;
+  gap: 22px;
   list-style: none;
 }
 
@@ -394,61 +392,4 @@ textarea:focus {
   textarea {
     font-size: 0.95rem;
   }
-}
-
-/* profile*/
-.auth-container {
-  position: relative;
-}
-
-.profile-wrapper{
-  position: relative;
-  cursor: pointer;
-}
-
-.avatar{
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #2563eb;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 16px;
-}
-
-.dropdown-menu {
-  position: absolute;
-  right: 0;
-  top: 50px;
-  width: 220px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-  padding: 15px;
-  display: none;
-  flex-direction: column;
-  z-index: 999;
-}
-
-.dropdown-menu a,
-.dropdown-menu button {
-  display: block;
-  margin-top: 8px;
-  text-decoration: none;
-  background: none;
-  border: none;
-  text-align: left;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.dropdown-menu button {
-  color: red;
-}
-
-.user-info {
-  margin-bottom: 8px;
 }
