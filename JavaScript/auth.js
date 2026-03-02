@@ -5,12 +5,12 @@ function showform(formId) {
 }
 
 const auth = firebase.auth();
-const db = firebase.firestore(); 
+const db = firebase.firestore();
 
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 //Google Sign-In
 
-const googleLogin = async() =>{
+const googleLogin = async () => {
   try {
     const result = await auth.signInWithPopup(googleProvider);
     const user = result.user;
@@ -18,7 +18,7 @@ const googleLogin = async() =>{
     const userRef = db.collection("users").doc(user.uid);
     const snap = await userRef.get();
 
-    if(!snap.exists){
+    if (!snap.exists) {
       await userRef.set({
         name: user.displayName || " ",
         email: user.email,
@@ -26,17 +26,17 @@ const googleLogin = async() =>{
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         provider: "google",
         profileComplete: false
-  });
+      });
     }
     window.location.href = "complete_profile.html"
-}
-catch(error){
+  }
+  catch (error) {
     alert(error.message);
   }
 }
 
 const googleBtn = document.getElementById("googleSignIn");
-if(googleBtn){
+if (googleBtn) {
   googleBtn.addEventListener("click", googleLogin);
 }
 
@@ -152,20 +152,66 @@ auth.onAuthStateChanged(async (user) => {
 });
 
 document.addEventListener("click", (e) => {
-  if(!e.target.classList.contains("toggle-password")) return;
+  if (!e.target.classList.contains("toggle-password")) return;
 
   const inputId = e.target.dataset.target;
   const input = document.getElementById(inputId);
 
-  if(!input) return;
+  if (!input) return;
 
-  if(input.type === "password"){
+  if (input.type === "password") {
     input.type = "text";
     e.target.textContent = "Visibility_off";
-} else{
-  input.type = "password";
-  e.target.textContent = "Visibility";
-}
+  } else {
+    input.type = "password";
+    e.target.textContent = "Visibility";
+  }
 })
 
+import { getAuth, onAuthStateChanged, signOut }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
+const auth1 = getAuth();
+
+const profileWrapper = document.getElementById("profileWrapper");
+const avatarCircle = document.getElementById("avatarCircle");
+const dropdownMenu = document.getElementById("dropdownMenu");
+const loginLinks = document.getElementById("loginLinks");
+const logoutBtn = document.getElementById("logoutBtn");
+
+onAuthStateChanged(auth1, (user) => {
+  if (user) {
+    profileWrapper.style.display = "block";
+    loginLinks.style.display = "none";
+
+    const initial = user.email.charAt(0).toUpperCase();
+    avatarCircle.textContent = initial;
+
+    document.getElementById("dropdownName").textContent = initial;
+    document.getElementById("dropdownEmail").textContent = user.email;
+
+  } else {
+    profileWrapper.style.display = "none";
+    loginLinks.style.display = "block";
+  }
+});
+
+// Toggle dropdown on avatar click
+avatarCircle.addEventListener("click", () => {
+  dropdownMenu.style.display =
+    dropdownMenu.style.display === "flex" ? "none" : "flex";
+});
+
+// Close dropdown when clicking outside
+document.addEventListener("click", (e) => {
+  if (!profileWrapper.contains(e.target)) {
+    dropdownMenu.style.display = "none";
+  }
+});
+
+// Logout
+logoutBtn.addEventListener("click", () => {
+  signOut(auth1).then(() => {
+    window.location.href = "Login.html";
+  });
+});
