@@ -93,32 +93,16 @@ const login = () => {
 // Form submit handlers (Register and Login pages)
 
 document.addEventListener("DOMContentLoaded", () => {
-  const registerForm = document.getElementById("register-form");
-  if (registerForm) {
-    registerForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-      register();
-    });
-  }
-
-  const loginForm = document.getElementById('login-form');
-  if (loginForm) {
-    loginForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-      login();
-    });
-  }
-});
-
-// Auth state → toggle UI on any page
 
 auth.onAuthStateChanged(async (user) => {
+
   const dropdownName = document.getElementById("dropdownName");
   const dropdownEmail = document.getElementById("dropdownEmail");
   const avatarCircle = document.getElementById("avatarCircle");
   const profileWrapper = document.getElementById("profileWrapper");
   const loginLinks = document.getElementById("loginLinks");
   const logoutBtn = document.getElementById("logoutBtn");
+  const dropdownMenu = document.getElementById("dropdownMenu");
 
   if (!user) {
     if (profileWrapper) profileWrapper.style.display = "none";
@@ -145,36 +129,41 @@ auth.onAuthStateChanged(async (user) => {
         "https://ui-avatars.com/api/?name=" + (user.email || "User");
     }
 
+    if (profileWrapper) profileWrapper.style.display = "block";
+    if (loginLinks) loginLinks.style.display = "none";
+
     if (logoutBtn) {
       logoutBtn.onclick = async () => {
         await auth.signOut();
         window.location.href = "index.html";
       };
     }
-  } catch (e) {
-    alert(e.message);
+
+    /* DROPDOWN TOGGLE */
+
+    if (avatarCircle && dropdownMenu) {
+
+      avatarCircle.addEventListener("click", (e) => {
+        e.stopPropagation();
+        dropdownMenu.style.display =
+          dropdownMenu.style.display === "block" ? "none" : "block";
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!avatarCircle.contains(e.target)) {
+          dropdownMenu.style.display = "none";
+        }
+      });
+
+    }
+
+  } catch (error) {
+    console.error(error);
   }
+
 });
 
-//avatar dropdown
-
-const avatarCircle = document.getElementById("avatarCircle");
-const dropdownMenu = document.getElementById("dropdownMenu");
-const profileWrapper = document.getElementById("profileWrapper");
-
-if (avatarCircle && dropdownMenu) {
-  avatarCircle.addEventListener("click", (e) => {
-    e.stopPropagation();
-    dropdownMenu.style.display =
-      dropdownMenu.style.display === "block" ? "none" : "block";
-  });
-
-  document.addEventListener("click", (e) => {
-    if (profileWrapper && !profileWrapper.contains(e.target)) {
-      dropdownMenu.style.display = "none";
-    }
-  });
-}
+});
 
 //password toggle
 
