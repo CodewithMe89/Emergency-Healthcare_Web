@@ -145,13 +145,12 @@ auth.onAuthStateChanged(async (user) => {
 
       avatarCircle.addEventListener("click", (e) => {
         e.stopPropagation();
-        dropdownMenu.style.display =
-          dropdownMenu.style.display === "block" ? "none" : "block";
+        dropdownMenu.classList.toggle("show");
       });
 
       document.addEventListener("click", (e) => {
-        if (!avatarCircle.contains(e.target)) {
-          dropdownMenu.style.display = "none";
+        if (profileWrapper && !profileWrapper.contains(e.target)) {
+          dropdownMenu.classList.remove("show");
         }
       });
 
