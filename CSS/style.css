@@ -393,3 +393,50 @@ textarea:focus {
     font-size: 0.95rem;
   }
 }
+
+.auth-container {
+  position: relative;
+  margin-left: auto;
+}
+
+.profile-wrapper {
+  position: relative;
+  cursor: pointer;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: 55px;
+  width: 230px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+  padding: 15px;
+  display: none;
+  z-index: 999;
+}
+
+.dropdown-menu button {
+  width: 100%;
+  padding: 8px;
+  margin-top: 10px;
+  border: none;
+  background: #ef4444;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
