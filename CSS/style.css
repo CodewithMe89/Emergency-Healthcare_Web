@@ -428,7 +428,18 @@ textarea:focus {
   padding: 15px;
   display: none;
   z-index: 999;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all .25s ease;
+  pointer-events: none;
 }
+
+.dropdown-menu.show{
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
 
 .dropdown-menu button {
   width: 100%;
@@ -438,5 +449,13 @@ textarea:focus {
   background: #ef4444;
   color: white;
   border-radius: 6px;
+  cursor: pointer;
+}
+
+.avatar-img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
   cursor: pointer;
 }
