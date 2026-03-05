@@ -417,27 +417,25 @@ textarea:focus {
   font-size: 16px;
 }
 
-.dropdown-menu {
-  position: absolute;
-  right: 0;
-  top: 55px;
-  width: 230px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 12px 25px rgba(0,0,0,0.15);
-  padding: 15px;
-  display: none;
-  z-index: 999;
-  opacity: 0;
-  transform: translateY(-10px);
-  transition: all .25s ease;
-  pointer-events: none;
+.dropdown-menu{
+  position:absolute;
+  right:0;
+  top:55px;
+  width:230px;
+  background:white;
+  border-radius:12px;
+  box-shadow:0 12px 25px rgba(0,0,0,0.15);
+  padding:15px;
+  opacity:0;
+  transform:translateY(-10px);
+  pointer-events:none;
+  transition:all .25s ease;
 }
 
 .dropdown-menu.show{
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
+  opacity:1;
+  transform:translateY(0);
+  pointer-events:auto;
 }
 
 
