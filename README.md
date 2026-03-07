@@ -9,10 +9,12 @@ It is designed as a beginner-friendly project to practice web development and de
 - **SOS Button** – A large red button that can trigger an emergency alert.  
 - **Profile Page** – Stores user details like name, blood group, and contact info.  
 - **First Aid Page** – Shows quick emergency tips for common situations.  
-- **Clean & Responsive UI** – Designed to work neatly on both desktop and mobile.  
+- **Clean & Responsive UI** – Designed to work neatly on both desktop and mobile.
+  
 
 ## 🛠 Tech Stack  
 - **HTML** → Structure of the website  
 - **CSS** → Styling and layout  
-- **JavaScript** → Button functionality and small interactions  
+- **JavaScript** → For form handling, login and register state and many more
+- **Firebase** → For storing details of a patients,driver and admin
 
