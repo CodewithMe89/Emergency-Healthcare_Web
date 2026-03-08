@@ -36,7 +36,7 @@ const googleLogin = async () => {
   }
 }
 
-const googleBtn = document.getElementById("googleSignIn");
+const googleBtn = document.getElementById("googleSignInRegister") || document.getElementById("googleSignInLogin");
 if (googleBtn) {
   googleBtn.addEventListener("click", googleLogin);
 }
@@ -44,12 +44,12 @@ if (googleBtn) {
 // Register (Auth + Firestore)
 
 const register = () => {
-  const name = document.getElementById("name")?.value || "";
-  const email = document.getElementById("email")?.value || "";
-  const password = document.getElementById("password")?.value || "";
-  const contact = document.getElementById("contact")?.value || "";
-  const emergencyContact = document.getElementById("emergencyContact")?.value || "";
-  const role = document.getElementById("role")?.value || "patient";
+const name = document.getElementById("name")?.value || "";
+const email = document.getElementById("email")?.value || "";
+const password = document.getElementById("password")?.value || "";
+const contact = document.getElementById("contact")?.value || "";
+const emergencyContact = document.getElementById("emergencyContact")?.value || "";
+const role = document.getElementById("role")?.value || "patient";
 
   auth.createUserWithEmailAndPassword(email, password)
     .then((userCredential) => {
@@ -76,24 +76,50 @@ const register = () => {
 
 // Login
 
-const login = () => {
-  const email = document.getElementById("loginEmail")?.value || "";
-  const password = document.getElementById("loginPassword")?.value || "";
+const login = async () =>{
+  const email = document.getElementById("email")?.value || "";
+  const password = document.getElementById("password")?.value || "";
 
-  auth.signInWithEmailAndPassword(email, password)
-    .then(() => {
-      alert("Login successful!");
+  try {
+    const userCredential = await auth.signInWithEmailAndPassword(email,password);
+    const user = userCredential.user;
+
+    const snap = await db.collection("users").doc(user.uid).get();
+    const role = snap.data().role;
+
+    if(role === "admin"){
+      window.location.href = "admin.html";
+    }
+    else if(role === "ambulanceDriver"){
+      window.location.href = "driver.html";
+    }
+    else{
       window.location.href = "index.html";
-    })
-    .catch((error) => {
-      alert(error.message);
-    });
-};
-
+    }
+  }catch(error){
+    alert(error.message);
+  }
+}
 // Form submit handlers (Register and Login pages)
 
 document.addEventListener("DOMContentLoaded", () => {
 
+  const registerForm = document.getElementById("registerForm");
+  if(registerForm){
+    registerForm.addEventListener("submit",(e)=>{
+      e.preventDefault();
+      register();
+    })
+  }
+
+  const loginForm = document.querySelector("#login-form form");
+
+  if(loginForm){
+    loginForm.addEventListener("submit",(e)=>{
+      e.preventDefault();
+      login();
+    })
+  }
 auth.onAuthStateChanged(async (user) => {
 
   const dropdownName = document.getElementById("dropdownName");
