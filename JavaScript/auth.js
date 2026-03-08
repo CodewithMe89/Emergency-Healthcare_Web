@@ -82,30 +82,36 @@ const role = document.getElementById("role")?.value || "patient";
 
 // Login
 
-const login = async () =>{
-  const email = document.getElementById("loginEmail")?.value || "";
-  const password = document.getElementById("loginPassword")?.value || "";
+const login =  () =>{
+const login = async () => {
 
-  try {
-    const userCredential = await auth.signInWithEmailAndPassword(email,password);
-    const user = userCredential.user;
+const email = document.getElementById("loginEmail").value;
+const password = document.getElementById("loginPassword").value;
 
-    const snap = await db.collection("users").doc(user.uid).get();
-    const role = snap.data().role;
+try {
 
-    if(role === "admin"){
-      window.location.href = "admin.html";
-    }
-    else if(role === "ambulanceDriver"){
-      window.location.href = "driver.html";
-    }
-    else{
-      window.location.href = "index.html";
-    }
-  }catch(error){
-    alert(error.message);
-  }
+const userCredential = await auth.signInWithEmailAndPassword(email,password);
+const user = userCredential.user;
+
+const snap = await db.collection("users").doc(user.uid).get();
+const role = snap.data().role;
+
+if(role === "ambulanceDriver"){
+window.location.href = "driver.html";
 }
+else if(role === "admin"){
+window.location.href = "admin.html";
+}
+else{
+window.location.href = "index.html";
+}
+
+}
+catch(error){
+alert(error.message);
+}
+
+};
 // Form submit handlers (Register and Login pages)
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -118,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 
-  const loginForm = document.querySelector("#login-form form");
+  const loginForm = document.getElementById("loginForm");
 
   if(loginForm){
     loginForm.addEventListener("submit",(e)=>{
