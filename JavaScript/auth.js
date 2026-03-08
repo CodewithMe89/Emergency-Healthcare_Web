@@ -65,7 +65,15 @@ const role = document.getElementById("role")?.value || "patient";
     })
     .then(() => {
       alert("Registration successful!");
-      window.location.href = "index.html";
+      if(role === "admin"){
+        window.location.href = "admin.html";
+      }
+      else if(role === "ambulanceDriver") {
+        window.location.href = "driver.html";
+      }
+      else{
+        window.location.href = "index.html";
+      }
     })
     .catch((error) => {
       alert(error.message);
