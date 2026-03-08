@@ -36,10 +36,8 @@ const googleLogin = async () => {
   }
 }
 
-const googleBtn = document.getElementById("googleSignInRegister") || document.getElementById("googleSignInLogin");
-if (googleBtn) {
-  googleBtn.addEventListener("click", googleLogin);
-}
+document.getElementById("googleSignInRegister")?.addEventListener("click",googleLogin);
+document.getElementById("googleSignInLogin")?.addEventListener("click",googleLogin);
 
 // Register (Auth + Firestore)
 
@@ -77,8 +75,8 @@ const role = document.getElementById("role")?.value || "patient";
 // Login
 
 const login = async () =>{
-  const email = document.getElementById("email")?.value || "";
-  const password = document.getElementById("password")?.value || "";
+  const email = document.getElementById("loginEmail")?.value || "";
+  const password = document.getElementById("loginPassword")?.value || "";
 
   try {
     const userCredential = await auth.signInWithEmailAndPassword(email,password);
