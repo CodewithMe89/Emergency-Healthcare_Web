@@ -82,7 +82,6 @@ const role = document.getElementById("role")?.value || "patient";
 
 // Login
 
-const login =  () =>{
 const login = async () => {
 
 const email = document.getElementById("loginEmail").value;
@@ -124,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 
-  const loginForm = document.getElementById("loginForm");
+  const loginForm = document.getElementById("login-form");
 
   if(loginForm){
     loginForm.addEventListener("submit",(e)=>{
@@ -220,5 +219,4 @@ document.addEventListener("click", (e) => {
     e.target.textContent = "Visibility";
   }
 })
-
 
