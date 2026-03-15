@@ -2,7 +2,7 @@ from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image
 import io
-from model import detect_accident
+from Backend.model import detect_accident
 
 app = FastAPI()
 app.add_middleware(
