@@ -70,6 +70,27 @@ imageInput?.addEventListener("change", () => {
   });
 })();
 
+// ================= Detect Logic =================
+
+async function detectAccident(file){
+
+  let formData = new FormData();
+  formData.append("file", file);
+
+  let res = await fetch("http://127.0.0.1:8000/detect-accident",{
+    method: "POST",
+    body: formData
+  });
+
+  if(!res.ok){
+    throw new Error("Detector server failed")
+  }
+
+  let data = await res.json();
+
+  return data.result;
+}
+
 // ================= CLOUDINARY UPLOAD =================
 
 async function uploadImageToCloudinary(file) {
@@ -139,16 +160,34 @@ async function uploadImageToCloudinary(file) {
     };
 
     // Upload image if selected
-    if (imageInput && imageInput.files.length > 0) {
-      try {
-        payload.imageUrl = await uploadImageToCloudinary(
-          imageInput.files[0]
-        );
-      } catch (err) {
-        alert("Image upload failed: " + err.message);
-        return;
+if (imageInput && imageInput.files.length > 0) {
+
+  const file = imageInput.files[0];
+
+  // RUN DEEPFAKE DETECTOR
+  try{
+      const accidentResult = await detectAccident(file);
+
+      if(accidentResult === "NO_ACCIDENT"){
+          if(!confirm("This image may not contain an accident. Submit anyway?"))
+           {
+            return;
       }
-    }
+  }
+}catch(err){
+      alert("Deepfake detection failed");
+      return;
+  }
+
+  // Upload to Cloudinary if image is real
+  try {
+      payload.imageUrl = await uploadImageToCloudinary(file);
+  } catch (err) {
+      alert("Image upload failed: " + err.message);
+      return;
+  }
+
+}
 
     // Save to Firestore
     try {
