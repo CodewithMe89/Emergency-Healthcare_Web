@@ -2,7 +2,7 @@ import tensorflow as tf
 import numpy as np
 from PIL import Image
 
-model = tf.keras.models.load_model("model.h5")
+model = tf.keras.models.load_model("Backend/model.h5")
 
 def detect_accident(img):
 
