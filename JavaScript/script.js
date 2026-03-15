@@ -77,7 +77,7 @@ async function detectAccident(file){
   let formData = new FormData();
   formData.append("file", file);
 
-  let res = await fetch("http://127.0.0.1:8000/detect-accident",{
+  let res = await fetch("https://emergency-healthcare-web.onrender.com/detect-accident",{
     method: "POST",
     body: formData
   });
