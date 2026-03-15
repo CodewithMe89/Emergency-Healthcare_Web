@@ -5,6 +5,7 @@ import io
 from Backend.model import detect_accident
 
 app = FastAPI()
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
