@@ -13,11 +13,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 @app.post("/detect-accident")
 async def detect_accident_api(file: UploadFile = File(...)):
 
     contents = await file.read()
-
     image = Image.open(io.BytesIO(contents))
 
     result = detect_accident(image)
