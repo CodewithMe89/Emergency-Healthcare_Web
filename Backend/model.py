@@ -1,18 +1,32 @@
-import tensorflow as tf
-import numpy as np
+from ultralytics import YOLO
 from PIL import Image
+import numpy as np
 
-model = tf.keras.models.load_model("Backend/model.h5")
+# load pretrained YOLO model
+model = YOLO("yolov8n.pt")
 
 def detect_accident(img):
 
-    img = img.resize((224,224))
-    img = np.array(img)/255.0
-    img = np.expand_dims(img, axis=0)
+    img = img.convert("RGB")
 
-    pred = model.predict(img)[0][0]
+    results = model(img)
 
-    if pred > 0.6:
+    accident_objects = [
+        "car",
+        "truck",
+        "bus",
+        "motorcycle",
+        "person"
+    ]
+
+    detected = []
+
+    for r in results:
+        for c in r.boxes.cls:
+            label = model.names[int(c)]
+            detected.append(label)
+
+    if any(obj in detected for obj in accident_objects):
         return "ACCIDENT"
     else:
         return "NO_ACCIDENT"
