@@ -1,4 +1,4 @@
-if(!firebase.apps.length){
+if (!firebase.apps.length) {
   alert("firebase not initialized properly");
 }
 // ================= IMAGE PREVIEW =================
@@ -72,17 +72,17 @@ imageInput?.addEventListener("change", () => {
 
 // ================= Detect Logic =================
 
-async function detectAccident(file){
+async function detectAccident(file) {
 
   let formData = new FormData();
   formData.append("file", file);
 
-  let res = await fetch("https://emergency-healthcare-web.onrender.com/detect-accident",{
+  let res = await fetch("https://emergency-healthcare-web.onrender.com/detect-accident", {
     method: "POST",
     body: formData
   });
 
-  if(!res.ok){
+  if (!res.ok) {
     throw new Error("Detector server failed")
   }
 
@@ -160,34 +160,34 @@ async function uploadImageToCloudinary(file) {
     };
 
     // Upload image if selected
-if (imageInput && imageInput.files.length > 0) {
+    if (imageInput && imageInput.files.length > 0) {
 
-  const file = imageInput.files[0];
+      const file = imageInput.files[0];
 
-  // RUN DEEPFAKE DETECTOR
-  try{
-      const accidentResult = await detectAccident(file);
+      // RUN DEEPFAKE DETECTOR
+      try {
+        const accidentResult = await detectAccident(file);
+        console.log("AI result:", accidentResult);
 
-      if(accidentResult === "NO_ACCIDENT"){
-          if(!confirm("This image may not contain an accident. Submit anyway?"))
-           {
-            return;
+        if (accidentResult !== "ACCIDENT") {
+          alert("No accident detected. Report blocked.")
+          return;
+        }
+      } catch (err) {
+        console.error("AI Error:", err);
+        alert("AI Server failed. Try again");
+        return;
       }
-  }
-}catch(err){
-      alert("Deepfake detection failed");
-      return;
-  }
 
-  // Upload to Cloudinary if image is real
-  try {
-      payload.imageUrl = await uploadImageToCloudinary(file);
-  } catch (err) {
-      alert("Image upload failed: " + err.message);
-      return;
-  }
+      // Upload to Cloudinary if image is real
+      try {
+        payload.imageUrl = await uploadImageToCloudinary(file);
+      } catch (err) {
+        alert("Image upload failed: " + err.message);
+        return;
+      }
 
-}
+    }
 
     // Save to Firestore
     try {
