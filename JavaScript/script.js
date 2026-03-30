@@ -127,41 +127,40 @@ async function uploadImageToCloudinary(file) {
   const descInput = document.getElementById("reportDesc");
 
   // Location button
-  useMyLocBtn.addEventListener("click", () => {
-    if (navigator.geolocation) {
- navigator.geolocation.getCurrentPosition(async (position) => {
-  const lat = position.coords.latitude;
-  const lng = position.coords.longitude;
-
-  document.getElementById("coordinates").innerText =
-    `Coordinates: ${lat}, ${lng}`;
-
-  const apiKey = "AIzaSyBiaLk4E3q-mIDkUBHcec8790LhCzcDLaY";
-
-  try {
-    const response = await fetch(
-      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`
-    );
-
-    const data = await response.json();
-
-    if (data.status === "OK") {
-      const address = data.results[0].formatted_address;
-      document.getElementById("address").value = address;
-    } else {
-      alert("Address not found");
-    }
-  } catch (error) {
-    console.error(error);
-    alert("Something went wrong");
+useMyLocBtn.addEventListener("click", () => {
+  if (!navigator.geolocation) {
+    alert("Geolocation not supported");
+    return;
   }
-});
-    }
-      else{
-        alert("Geolocation not supported")
-      }
-    });
 
+  navigator.geolocation.getCurrentPosition(async (position) => {
+    const lat = position.coords.latitude;
+    const lng = position.coords.longitude;
+
+    document.getElementById("coordinates").innerText =
+      `Coordinates: ${lat}, ${lng}`;
+
+    const apiKey = "AIzaSyBiaLk4E3q-mIDkUBHcec8790LhCzcDLaY";
+
+    try {
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`
+      );
+
+      const data = await response.json();
+
+      if (data.status === "OK") {
+        document.getElementById("address").value =
+          data.results[0].formatted_address;
+      } else {
+        alert("Address not found");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong");
+    }
+  });
+});
 
   // Submit report
   form.addEventListener("submit", async (e) => {
@@ -170,7 +169,7 @@ async function uploadImageToCloudinary(file) {
     const payload = {
       address: addressInput.value.trim(),
       description: descInput.value.trim(),
-      coords: document.getElementById("coordinates").innerText || null,,
+      coords: document.getElementById("coordinates").innerText || null,
       source: "public-report",
       createdAt: Date.now(),
       status: "new",
