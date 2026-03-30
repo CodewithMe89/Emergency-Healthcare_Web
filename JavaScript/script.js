@@ -127,23 +127,32 @@ async function uploadImageToCloudinary(file) {
   const descInput = document.getElementById("reportDesc");
 
   // Location button
-  useMyLocBtn?.addEventListener("click", () => {
-    if (!navigator.geolocation) {
-      alert("Geolocation not supported.");
-      return;
-    }
+  useMyLocBtn.addEventListener("click", () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
 
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const { latitude, longitude } = pos.coords;
-        coordHelper.textContent = `Coordinates: ${latitude.toFixed(
-          5
-        )}, ${longitude.toFixed(5)}`;
-      },
-      (err) => alert("Could not get location: " + err.message),
-      { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
-    );
-  });
+        document.getElementById("coordinates").innerText = 
+        `Coordinates: ${lat}, ${lng}`;
+
+        const apiKey = "AIzaSyBiaLk4E3q-mIDkUBHcec8790LhCzcDLaY";
+
+        const response = await response.json();
+
+        if(data.status === "OK"){
+          const address = data.results[0].formatted_address;
+          addressInput.value = address;
+        }else{
+          alert("Address not found");
+        }
+      });
+    }
+      else{
+        alert("Geolocation not supported")
+      }
+    });
+
 
   // Submit report
   form.addEventListener("submit", async (e) => {
