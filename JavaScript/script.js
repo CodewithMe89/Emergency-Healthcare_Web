@@ -140,7 +140,7 @@ async function uploadImageToCloudinary(file) {
 
   try {
     const response = await fetch(
-      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${AIzaSyBiaLk4E3q-mIDkUBHcec8790LhCzcDLaY}`
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`
     );
 
     const data = await response.json();
@@ -170,7 +170,7 @@ async function uploadImageToCloudinary(file) {
     const payload = {
       address: addressInput.value.trim(),
       description: descInput.value.trim(),
-      coords: coordHelper.textContent || null,
+      coords: document.getElementById("coordinates").innerText || null,,
       source: "public-report",
       createdAt: Date.now(),
       status: "new",
