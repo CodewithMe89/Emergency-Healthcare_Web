@@ -121,32 +121,41 @@ async function uploadImageToCloudinary(file) {
   const form = document.getElementById("report-form");
   if (!form) return;
 
-  const useMyLocBtn = document.getElementById("useMyLocation");
-  const addressInput = document.getElementById("reportAddress");
+  const useMyLocBtn = document.getElementById("useLocation");
+  const addressInput = document.getElementById("address");
   const coordHelper = document.getElementById("coordHelper");
   const descInput = document.getElementById("reportDesc");
 
   // Location button
   useMyLocBtn.addEventListener("click", () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(async (position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
+ navigator.geolocation.getCurrentPosition(async (position) => {
+  const lat = position.coords.latitude;
+  const lng = position.coords.longitude;
 
-        document.getElementById("coordinates").innerText = 
-        `Coordinates: ${lat}, ${lng}`;
+  document.getElementById("coordinates").innerText =
+    `Coordinates: ${lat}, ${lng}`;
 
-        const apiKey = "AIzaSyBiaLk4E3q-mIDkUBHcec8790LhCzcDLaY";
+  const apiKey = "YOUR_API_KEY";
 
-        const response = await response.json();
+  try {
+    const response = await fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${AIzaSyBiaLk4E3q-mIDkUBHcec8790LhCzcDLaY}`
+    );
 
-        if(data.status === "OK"){
-          const address = data.results[0].formatted_address;
-          addressInput.value = address;
-        }else{
-          alert("Address not found");
-        }
-      });
+    const data = await response.json();
+
+    if (data.status === "OK") {
+      const address = data.results[0].formatted_address;
+      document.getElementById("address").value = address;
+    } else {
+      alert("Address not found");
+    }
+  } catch (error) {
+    console.error(error);
+    alert("Something went wrong");
+  }
+});
     }
       else{
         alert("Geolocation not supported")
