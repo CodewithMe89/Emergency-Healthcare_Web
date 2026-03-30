@@ -136,7 +136,7 @@ async function uploadImageToCloudinary(file) {
   document.getElementById("coordinates").innerText =
     `Coordinates: ${lat}, ${lng}`;
 
-  const apiKey = "YOUR_API_KEY";
+  const apiKey = "AIzaSyBiaLk4E3q-mIDkUBHcec8790LhCzcDLaY";
 
   try {
     const response = await fetch(
