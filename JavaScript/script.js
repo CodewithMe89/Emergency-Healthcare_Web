@@ -116,7 +116,6 @@ async function uploadImageToCloudinary(file) {
 }
 
 // ================= REPORT EMERGENCY FORM =================
-
 (function () {
   const form = document.getElementById("report-form");
   if (!form) return;
@@ -125,6 +124,7 @@ async function uploadImageToCloudinary(file) {
   const addressInput = document.getElementById("address");
   const coordHelper = document.getElementById("coordHelper");
   const descInput = document.getElementById("reportDesc");
+  let userCoords = null;
 
   // Location button
 useMyLocBtn.addEventListener("click", () => {
@@ -133,12 +133,16 @@ useMyLocBtn.addEventListener("click", () => {
     return;
   }
 
+  if(!userCoords){
+    alert("Please click 'Use My Location'")
+    return;
+  }
+  
   navigator.geolocation.getCurrentPosition(async (position) => {
     const lat = position.coords.latitude;
     const lng = position.coords.longitude;
 
-    document.getElementById("coordinates").innerText =
-      `Coordinates: ${lat}, ${lng}`;
+    userCoords = {lat,lng};
 
     const apiKey = "AIzaSyBiaLk4E3q-mIDkUBHcec8790LhCzcDLaY";
 
@@ -169,7 +173,7 @@ useMyLocBtn.addEventListener("click", () => {
     const payload = {
       address: addressInput.value.trim(),
       description: descInput.value.trim(),
-      coords: document.getElementById("coordinates").innerText || null,
+      coords: userCoords,
       source: "public-report",
       createdAt: Date.now(),
       status: "new",
