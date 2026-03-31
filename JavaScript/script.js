@@ -140,19 +140,15 @@ useMyLocBtn.addEventListener("click", () => {
 
     userCoords = {lat,lng};
 
-    const apiKey = "AIzaSyBiaLk4E3q-mIDkUBHcec8790LhCzcDLaY";
-
     try {
       const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`
+        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
       );
 
       const data = await response.json();
-      console.log(data);
 
-      if (data.status === "OK") {
-        document.getElementById("address").value =
-          data.results[0].formatted_address;
+      if (data && data.display_name) {
+        document.getElementById("address").value = data.display_name;
       } else {
         alert("Address not found");
       }
