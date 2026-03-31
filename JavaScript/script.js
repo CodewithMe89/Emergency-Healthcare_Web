@@ -148,6 +148,7 @@ useMyLocBtn.addEventListener("click", () => {
       );
 
       const data = await response.json();
+      console.log(data);
 
       if (data.status === "OK") {
         document.getElementById("address").value =
