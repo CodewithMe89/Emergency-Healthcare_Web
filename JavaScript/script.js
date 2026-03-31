@@ -133,11 +133,7 @@ useMyLocBtn.addEventListener("click", () => {
     return;
   }
 
-  if(!userCoords){
-    alert("Please click 'Use My Location'")
-    return;
-  }
-  
+
   navigator.geolocation.getCurrentPosition(async (position) => {
     const lat = position.coords.latitude;
     const lng = position.coords.longitude;
