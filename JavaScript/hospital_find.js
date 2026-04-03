@@ -11,8 +11,9 @@
         <div>
           <div style="font-weight:700;color:#183a75;">${h.name}</div>
           <div style="color:#5a6ea8; font-size:.9rem;">
-          ${h.address}<br>
-          <strong style="color:#183a75;">${h.distance.toFixed(2)} km away</strong>
+            ${h.address}<br>
+            <strong style="color:#183a75;">${h.distance.toFixed(2)} km away</strong>
+          </div>
         </div>
         <div>
           <a class="btn btn-primary" target="_blank"
@@ -35,7 +36,7 @@
       Math.cos(lat2 * Math.PI / 180) *
       Math.sin(dLon / 2) * Math.sin(dLon / 2);
 
-    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
 
   async function findNearby() {
@@ -47,86 +48,44 @@
     navigator.geolocation.getCurrentPosition(async (pos) => {
       const { latitude, longitude } = pos.coords;
 
-      list.innerHTML = "<li style='padding:20px'>Loading real hospitals...</li>";
+      list.innerHTML = "<li style='padding:20px'>Loading hospitals...</li>";
 
-try {
-      const response = await fetch(
-        "https://places.googleapis.com/v1/places:searchNearby",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Goog-Api-Key": "AIzaSyBsZHAc0hsb8asR_jSMrzEyH5pC-DxexCE",
-            "X-Goog-FieldMask": "places.displayName,places.formattedAddress,places.location"
-          },
-          body: JSON.stringify({
-            includedTypes: ["hospital"],
-            maxResultCount: 20,
-            locationRestriction: {
-              circle: {
-                center: {
-                  latitude: latitude,
-                  longitude: longitude
-                },
-                radius: 5000
-              }
-            }
-          })
-        }
-      );
-
-      if(!response.ok){
-        console.log("status :",response.status)
-        const text = await response.text()
-        console.log("Error body:", text)
-        throw new Error("API request failed")
-
-      }
-      const data = await response.json();
-      console.log(data)
-
-      list.innerHTML = "";
-
-      if (!data.places || data.places.length === 0) {
-        list.innerHTML = "<li>No hospitals found</li>";
-        return;
-      }
-
-      // 🔥 DISTANCE + SORT
-      const hospitals = data.places.map(p => {
-        const lat = p.location.latitude;
-        const lng = p.location.longitude;
-
-        const distance = calculateDistance(
-          latitude,
-          longitude,
-          lat,
-          lng
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&q=hospital&limit=20&bounded=1&viewbox=${longitude-0.05},${latitude+0.05},${longitude+0.05},${latitude-0.05}`
         );
 
-        return {
-          name: p.displayName.text,
-          address: p.formattedAddress,
-          lat,
-          lng,
-          distance
-        };
-      });
+        const data = await response.json();
 
-      hospitals.sort((a, b) => a.distance - b.distance);
+        list.innerHTML = "";
 
-      hospitals.forEach(h => {
-        list.appendChild(makeItem(h));
-      });
+        const hospitals = data.map(p => {
+          const lat = parseFloat(p.lat);
+          const lng = parseFloat(p.lon);
 
-    } catch (err) {
-      console.error(err);
-      list.innerHTML = "<li>Error loading hospitals</li>";
-    }
+          const distance = calculateDistance(latitude, longitude, lat, lng);
 
-  });
-}
+          return {
+            name: p.display_name.split(",")[0],
+            address: p.display_name,
+            lat,
+            lng,
+            distance
+          };
+        });
 
-// Add event listener to the button
-btn.addEventListener('click', findNearby);
-}) ();
+        hospitals.sort((a, b) => a.distance - b.distance);
+
+        hospitals.forEach(h => {
+          list.appendChild(makeItem(h));
+        });
+
+      } catch (err) {
+        console.error(err);
+        list.innerHTML = "<li>Error loading hospitals</li>";
+      }
+    });
+  }
+
+  btn.addEventListener('click', findNearby);
+})();
