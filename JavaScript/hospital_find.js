@@ -12,7 +12,7 @@
           <div style="font-weight:700;color:#183a75;">${h.name}</div>
           <div style="color:#5a6ea8; font-size:.9rem;">
           ${h.address}<br>
-          <strong style="color:#183a75;">${h.distance.toFixed(2)} km away</div>
+          <strong style="color:#183a75;">${h.distance.toFixed(2)} km away</strong>
         </div>
         <div>
           <a class="btn btn-primary" target="_blank"
@@ -76,7 +76,11 @@ try {
       );
 
       if(!response.ok){
-        throw new Error(`HTTP error: ${response.status}`)
+        console.log("status :",response.status)
+        const text = await response.text()
+        console.log("Error body:", text)
+        throw new Error("API request failed")
+
       }
       const data = await response.json();
       console.log(data)
