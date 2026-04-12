@@ -163,11 +163,11 @@ auth.onAuthStateChanged(async (user) => {
     }
 
     if (dropdownPhone) {
-      dropdownPhone.textContent = "phone: " + (user.contact || "N/A")
+      dropdownPhone.textContent = "phone: " + (data.contact || "N/A")
     }
 
     if(dropdownEmergency){
-      dropdownEmergency.textContent = "Emergency: " + (user.emergencyContact || "N/A")
+      dropdownEmergency.textContent = "Emergency: " + (data.emergencyContact || "N/A")
     }
     if (avatarCircle) {
       avatarCircle.src =
