@@ -1,6 +1,7 @@
 if (!firebase.apps.length) {
   alert("firebase not initialized properly");
 }
+
 // ================= IMAGE PREVIEW =================
 
 const imageInput = document.getElementById("reportImage");
@@ -24,6 +25,8 @@ imageInput?.addEventListener("change", () => {
   const sosCountdown = document.getElementById("sosCountdown");
   const cancelSosBtn = document.getElementById("cancelSosBtn");
   const sendNowBtn = document.getElementById("sendNowBtn");
+
+
 
   if (!sosBtn || !sosModal) return;
 
@@ -52,10 +55,43 @@ imageInput?.addEventListener("change", () => {
     timerId = null;
   }
 
-  function triggerSOS() {
-    closeModal();
-    window.location.href = "tel:112";
-  }
+  async function triggerSOS() {
+
+    const user = firebase.auth().currentUser;
+      if (!user) {
+        alert('User not logged in')
+        return;
+      }
+
+      const db = firebase.firestore();
+      try{
+        const userSnap = await db.collection("users").doc(user.uid).get();
+        const data = userSnap.data();
+
+        navigator.geolocation.getCurrentPosition(async (pos) =>{
+          const coords = {
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude
+          }
+        })
+        await db.collection("emergencies").add({
+          userId: user.uid,
+          name: data.name,
+          contact: data.contact,
+          emergencyContact: data.emergencyContact,
+          medicalHistory: data.medicalHistory,
+          allergies: data.allergies,
+          status: "Pending",
+          location: coords,
+          createdAt: Date.now()
+        })
+        alert('Emergency Sent successfully!')
+        window.location.href = "tel:112"
+
+      }catch(err){
+        alert("Emergency failed: "+ err.message);
+      }
+    }
 
   sosBtn.addEventListener("click", (e) => {
     e.preventDefault();
@@ -127,37 +163,37 @@ async function uploadImageToCloudinary(file) {
   let userCoords = null;
 
   // Location button
-useMyLocBtn.addEventListener("click", () => {
-  if (!navigator.geolocation) {
-    alert("Geolocation not supported");
-    return;
-  }
-
-
-  navigator.geolocation.getCurrentPosition(async (position) => {
-    const lat = position.coords.latitude;
-    const lng = position.coords.longitude;
-
-    userCoords = {lat,lng};
-
-    try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
-      );
-
-      const data = await response.json();
-
-      if (data && data.display_name) {
-        document.getElementById("address").value = data.display_name;
-      } else {
-        alert("Address not found");
-      }
-    } catch (error) {
-      console.error(error);
-      alert("Something went wrong");
+  useMyLocBtn.addEventListener("click", () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation not supported");
+      return;
     }
+
+
+    navigator.geolocation.getCurrentPosition(async (position) => {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+
+      userCoords = { lat, lng };
+
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
+        );
+
+        const data = await response.json();
+
+        if (data && data.display_name) {
+          document.getElementById("address").value = data.display_name;
+        } else {
+          alert("Address not found");
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Something went wrong");
+      }
+    });
   });
-});
 
   // Submit report
   form.addEventListener("submit", async (e) => {
@@ -169,7 +205,7 @@ useMyLocBtn.addEventListener("click", () => {
       coords: userCoords,
       source: "public-report",
       createdAt: Date.now(),
-      status: "new",
+      status: "Pending",
       imageUrl: null,
     };
 
