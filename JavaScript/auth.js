@@ -23,13 +23,19 @@ const googleLogin = async () => {
       await userRef.set({
         name: user.displayName || " ",
         email: user.email,
+        contact: "",
+        emergencyContact: "",
+        medicalHistory: "",
+        allergies: "",
         role: "patient",
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         provider: "google",
         profileComplete: false
       });
     }
-    window.location.href = "complete_profile.html"
+    if(!data.contact){
+      window.location.href = "complete_profile.html"
+    }
   }
   catch (error) {
     alert(error.message);
@@ -131,6 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
       login();
     })
   }
+
 auth.onAuthStateChanged(async (user) => {
 
   const dropdownName = document.getElementById("dropdownName");
@@ -163,7 +170,7 @@ auth.onAuthStateChanged(async (user) => {
     }
 
     if (dropdownPhone) {
-      dropdownPhone.textContent = "phone: " + (data.contact || "N/A")
+      dropdownPhone.textContent = "phone: " + (data.contact ? data.contact: "Not added")
     }
 
     if(dropdownEmergency){
