@@ -21,6 +21,9 @@ auth.onAuthStateChanged(async (user) => {
   }
 });
 
+document.getElementById('completeProfileFomr')
+.addEventListener('submit',async (e) => {
+  e.preventDefault()
     const contact = document.getElementById("contact").value.trim();
     const emergencyContact = document.getElementById("emergencyContact").value.trim();
     const medical = document.getElementById('medical').value.trim();
@@ -55,3 +58,6 @@ auth.onAuthStateChanged(async (user) => {
     } catch (err) {
       alert("update failed: " + err.message)
     }
+
+})
+  
