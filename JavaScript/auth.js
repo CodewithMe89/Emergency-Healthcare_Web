@@ -135,6 +135,8 @@ auth.onAuthStateChanged(async (user) => {
 
   const dropdownName = document.getElementById("dropdownName");
   const dropdownEmail = document.getElementById("dropdownEmail");
+  const dropdownPhone = document.getElementById('dropdownPhone')
+  const dropdownEmergency = document.getElementById('dropdownEmergency')
   const avatarCircle = document.getElementById("avatarCircle");
   const profileWrapper = document.getElementById("profileWrapper");
   const loginLinks = document.getElementById("loginLinks");
@@ -160,6 +162,13 @@ auth.onAuthStateChanged(async (user) => {
       dropdownEmail.textContent = data.email || user.email || "";
     }
 
+    if (dropdownPhone) {
+      dropdownPhone.textContent = "phone: " + (user.contact || "N/A")
+    }
+
+    if(dropdownEmergency){
+      dropdownEmergency.textContent = "Emergency: " + (user.emergencyContact || "N/A")
+    }
     if (avatarCircle) {
       avatarCircle.src =
         user.photoURL ||
