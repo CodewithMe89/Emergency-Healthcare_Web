@@ -1,4 +1,3 @@
-console.log('js Loaded')
 const auth = firebase.auth();
 const db = firebase.firestore();
 
@@ -24,7 +23,6 @@ auth.onAuthStateChanged(async (user) => {
 document.addEventListener("DOMContentLoaded", () => {
 
   const form = document.getElementById("completeProfileForm");
-  console.log(document.getElementById("completeProfileForm"));
 
   if (!form) {
     console.error("Form not found");
