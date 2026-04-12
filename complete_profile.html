@@ -1,26 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Emergency Healthcare | Complete Profile</title>
-<script src="https://www.gstatic.com/firebasejs/12.4.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/12.4.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore-compat.js"></script>
-  <link rel="stylesheet" href="CSS/complete_Profile.css">
+    <script src="https://www.gstatic.com/firebasejs/12.4.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.4.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore-compat.js"></script>
+    <link rel="stylesheet" href="CSS/complete_Profile.css">
 </head>
+
 <body>
     <div class="container">
         <form id="completeProfileForm" class="form-box">
-        <h2>Complete Your Profile</h2>
-        <label for="contact" class="required">Contact</label>
+            <h2>Complete Your Profile</h2>
+            <label for="contact" class="required">Contact</label>
             <input type="text" id="contact" placeholder="Contact Number" pattern="(\+91)?[0-9]{10}" required>
             <label for="emergencyContact" class="required">Emergency Contact</label>
             <input type="tel" id="emergencyContact" placeholder="Emergency Contact" pattern="(\+91)?[0-9]{10}" required>
-            <button type="submit">Continue</button>
+            <label for="medical" class="required">Medical History</label>
+            <input id="medical" placeholder="Medical History">
+            <label for="allergies">Allergies</label>
+            <input id="allergies" placeholder="Allergies">
+            <button type="submit">Save profile</button>
         </form>
     </div>
     <script src="JavaScript/firebase.js"></script>
     <script src="JavaScript/complete_profile.js"></script>
 </body>
+
 </html>

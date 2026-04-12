@@ -38,7 +38,7 @@ const googleLogin = async () => {
       data = snap.data()
     }
     if(!data.contact){
-      window.location.href = "completeProfile.html"
+      window.location.href = "complete_profile.html"
     }else{
       window.location.href = 'index.html'
     }
