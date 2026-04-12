@@ -19,8 +19,9 @@ const googleLogin = async () => {
     const userRef = db.collection("users").doc(user.uid);
     const snap = await userRef.get();
 
+    let data;
     if (!snap.exists) {
-      await userRef.set({
+      data = {
         name: user.displayName || " ",
         email: user.email,
         contact: "",
@@ -31,10 +32,15 @@ const googleLogin = async () => {
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         provider: "google",
         profileComplete: false
-      });
+      };
+      await userRef.set(data)
+    }else{
+      data = snap.data()
     }
     if(!data.contact){
-      window.location.href = "complete_profile.html"
+      window.location.href = "completeProfile.html"
+    }else{
+      window.location.href = 'index.html'
     }
   }
   catch (error) {
