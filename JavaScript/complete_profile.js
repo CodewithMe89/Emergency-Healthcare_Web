@@ -21,43 +21,59 @@ auth.onAuthStateChanged(async (user) => {
   }
 });
 
-document.getElementById('completeProfileFomr')
-.addEventListener('submit',async (e) => {
-  e.preventDefault()
+document.addEventListener("DOMContentLoaded", () => {
+
+  const form = document.getElementById("completeProfileForm");
+
+  if (!form) {
+    console.error("Form not found");
+    return;
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
     const contact = document.getElementById("contact").value.trim();
     const emergencyContact = document.getElementById("emergencyContact").value.trim();
-    const medical = document.getElementById('medical').value.trim();
-    const allergies = document.getElementById('allergies').value.trim()
+    const medical = document.getElementById("medical").value.trim();
+    const allergies = document.getElementById("allergies").value.trim();
 
     if (!contact || !emergencyContact) {
       alert("Phone and Emergency Contact are required");
       return;
     }
+
     const phoneRegex = /^[0-9]{10}$/;
 
     if (!phoneRegex.test(contact) || !phoneRegex.test(emergencyContact)) {
       alert("Enter valid 10-digit numbers");
       return;
     }
-    const user = auth.currentUser;
+
+    const user = firebase.auth().currentUser;
+
     if (!user) {
-      alert("Session expired. Please log in again.")
-      window.location.href = "Login.html"
+      alert("Session expired");
+      window.location.href = "Login.html";
       return;
     }
+
     try {
-      await db.collection("users").doc(user.uid).set({
+      await firebase.firestore().collection("users").doc(user.uid).set({
         contact,
         emergencyContact,
         medicalHistory: medical,
         allergies: allergies,
         profileComplete: true
       }, { merge: true });
-      alert("Profile updated successfully!")
-      window.location.href = "index.html";
-    } catch (err) {
-      alert("update failed: " + err.message)
-    }
 
-})
+      alert("Profile updated successfully!");
+      window.location.href = "index.html";
+
+    } catch (err) {
+      alert("Update failed: " + err.message);
+    }
+  });
+
+});
   
