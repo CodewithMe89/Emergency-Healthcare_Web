@@ -56,91 +56,69 @@ imageInput?.addEventListener("change", () => {
   }
 
   async function triggerSOS() {
-    const auth = firebase.auth();
-    const db = firebase.firestore();
 
-    const user = auth.currentUser;
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+  const user = auth.currentUser;
 
-    const last = localStorage.getItem('lastSOS')
-    if(last && Date.now() - last < 3000){
-      alert("Please wait before sending another SOS");
-      return;
+  const last = localStorage.getItem('lastSOS');
+  if (last && Date.now() - last < 30000) {
+    alert("Please wait before sending another SOS");
+    return;
+  }
+
+  try {
+
+    let emergencyData = {
+      userId: null,
+      name: "Guest User",
+      contact: "Unknown",
+      emergencyContact: "Unknown",
+      medicalHistory: "N/A"
+    };
+
+    // ✅ login user
+    if (user) {
+      const snap = await db.collection('users').doc(user.uid).get();
+      const data = snap.data();
+
+      emergencyData = {
+        userId: user.uid,
+        name: data.name || "User",
+        contact: data.contact || "Unknown",
+        emergencyContact: data.emergencyContact || "Unknown",
+        medicalHistory: data.medicalHistory || "N/A"
+      };
     }
 
-    try{
-      let emergencyData = {
-        userId: null,
-        name: "Guest User",
-        contact: "Unknown",
-        emergencyContact: "Unknown",
-        medicalHistory: "Unknown"
-      }
-      if(user){
-        const snap = await db.collection('users').doc(user.uid).get();
-        const data = snap.data();
-  
-          emergencyData = {
-          userId: user.uid,
-          name: data.name || "User",
-          contact: data.contact || "Unknown",
-          emergencyContact: data.emergencyContact || "Unknown",
-          medicalHistory: data.medicalHistory || "N/A"
-        };
-      }
-      navigator.geolocation.getCurrentPosition(async (pos) => {
-        const coords = {
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude
-        };
-        
-        await db.collection("emergencies").add({
-          ...emergencyData,
-          location: coords,
-          status: "Pending",
-          createdAt: Date.now()
-        });
-        localStorage.setItem('lastSOS',Date.now());
+    navigator.geolocation.getCurrentPosition(async (pos) => {
 
-        alert("Emergency Sent Successfully!");
+      const coords = {
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude
+      };
 
-        window.location.href = "tel:112"
-      }, (err) => {
-        alert("Location permission denied.")
-      })
-    }catch(err){
-      alert("Emergency failed: " + err.message)
-    }
+      await db.collection("emergencies").add({
+        ...emergencyData,
+        location: coords,
+        status: "Pending",
+        createdAt: Date.now()
+      });
 
+      localStorage.setItem('lastSOS', Date.now());
 
+      alert("Emergency Sent Successfully!");
 
-      try{
-        const userSnap = await db.collection("users").doc(user.uid).get();
-        const data = userSnap.data();
+      window.location.href = "tel:112";
 
-        navigator.geolocation.getCurrentPosition(async (pos) =>{
-          const coords = {
-            lat: pos.coords.latitude,
-            lng: pos.coords.longitude
-          }
-        })
-        await db.collection("emergencies").add({
-          userId: user.uid,
-          name: data.name,
-          contact: data.contact,
-          emergencyContact: data.emergencyContact,
-          medicalHistory: data.medicalHistory,
-          allergies: data.allergies,
-          status: "Pending",
-          location: coords,
-          createdAt: Date.now()
-        })
-        alert('Emergency Sent successfully!')
-        window.location.href = "tel:112"
+    }, () => {
+      alert("Location permission denied");
+    });
 
-      }catch(err){
-        alert("Emergency failed: "+ err.message);
-      }
-    }
+  } catch (err) {
+    alert("Emergency failed: " + err.message);
+  }
+}
 
   sosBtn.addEventListener("click", (e) => {
     e.preventDefault();
