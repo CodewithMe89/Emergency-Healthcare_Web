@@ -56,14 +56,63 @@ imageInput?.addEventListener("change", () => {
   }
 
   async function triggerSOS() {
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
-    const user = firebase.auth().currentUser;
-      if (!user) {
-        alert('User not logged in')
-        return;
+    const user = auth.currentUser;
+
+    const last = localStorage.getItem('lastSOS')
+    if(last && Date.now() - last < 3000){
+      alert("Please wait before sending another SOS");
+      return;
+    }
+
+    try{
+      let emergencyData = {
+        userId: null,
+        name: "Guest User",
+        contact: "Unknown",
+        emergencyContact: "Unknown",
+        medicalHistory: "Unknown"
       }
+      if(user){
+        const snap = await db.collection('users').doc(user.uid).get();
+        const data = snap.data();
+  
+          emergencyData = {
+          userId: user.uid,
+          name: data.name || "User",
+          contact: data.contact || "Unknown",
+          emergencyContact: data.emergencyContact || "Unknown",
+          medicalHistory: data.medicalHistory || "N/A"
+        };
+      }
+      navigator.geolocation.getCurrentPosition(async (pos) => {
+        const coords = {
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude
+        };
+        
+        await db.collection("emergencies").add({
+          ...emergencyData,
+          location: coords,
+          status: "Pending",
+          createdAt: Date.now()
+        });
+        localStorage.setItem('lastSOS',Date.now());
 
-      const db = firebase.firestore();
+        alert("Emergency Sent Successfully!");
+
+        window.location.href = "tel:112"
+      }, (err) => {
+        alert("Location permission denied.")
+      })
+    }catch(err){
+      alert("Emergency failed: " + err.message)
+    }
+
+
+
       try{
         const userSnap = await db.collection("users").doc(user.uid).get();
         const data = userSnap.data();
