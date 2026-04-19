@@ -4,25 +4,25 @@ const db = firebase.firestore()
 //Admin Auth.check
 auth.onAuthStateChanged(async (user) => {
     if(!user){
-        alert("Please Login First")
         window.location.href = "Login.html"
         return;
     }
 
     const snap = await db.collection("users").doc(user.uid).get();
 
-    if(!snap.exists){
-        alert("User Data not Found")
-        window.location.href = "Login.html"
-        return;
-    }
+    const role = snap.data().role;
+
+    // if(!snap.exists){
+    //     alert("User Data not Found")
+    //     window.location.href = "Login.html"
+    //     return;
+    // }
 
     if(role !== "admin"){
         alert("Access denied: Not an admin")
         window.location.href = "index.html"
         return;
     }
-    console.log("Admin access Granted")
 });
 
 db.collection('emergencies')
@@ -74,7 +74,7 @@ function getDistance (lat1,lng1,lat2,lng2) {
     const a = 
     Math.sin(dLat/2) * Math.sin(dLat/2) +
     Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) *
-    Math.sin(dLon/2) * Math.sin(dLon/2);
+    Math.sin(dLng/2) * Math.sin(dLng/2);
 
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
     return R * c
