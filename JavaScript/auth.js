@@ -61,43 +61,51 @@ const register = () => {
   const emergencyContact = document.getElementById("emergencyContact")?.value || "";
   const role = document.getElementById("role")?.value || "patient";
 
-  auth.createUserWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
+ auth.createUserWithEmailAndPassword(email, password)
+  .then((userCredential) => {
 
-      return db.collection("users").doc(user.uid).set({
-        name,
-        email,
-        contact,
-        emergencyContact,
-        role,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    const user = userCredential.user;
+
+    return db.collection("users").doc(user.uid).set({
+      name,
+      email,
+      contact,
+      emergencyContact,
+      role,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    })
+    .then(() => user); // 🔥 user forward करो
+  })
+
+  .then(async (user) => {
+
+    alert("Registration successful!");
+
+    if (role === "admin") {
+      window.location.href = "admin.html";
+    }
+
+    else if (role === "ambulanceDriver") {
+
+      await db.collection("ambulances").add({
+        driverName: name,
+        contact: contact,
+        location: { lat: 0, lng: 0 },
+        status: "Available",
+        userId: user.uid   // ✅ अब काम करेगा
       });
 
-    })
-    .then(async () => {
-      alert("Registration successful!");
-      if (role === "admin") {
-        window.location.href = "admin.html";
-      }
-      else if (role === "ambulanceDriver") {
-        await db.collection("ambulances").add({
-          driverName: name,
-          contact: contact,
-          location: { lat: 0, lng: 0 },
-          status: "Available",
-          userId: user.uid
-        })
-        window.location.href = "driver.html";
-      }
-      else {
-        window.location.href = "index.html";
-      }
-    })
-    .catch((error) => {
-      alert(error.message);
-    });
-};
+      window.location.href = "driver.html";
+    }
+
+    else {
+      window.location.href = "index.html";
+    }
+
+  })
+  .catch((error) => {
+    alert(error.message);
+  });
 
 // Login
 
@@ -249,3 +257,4 @@ document.addEventListener("click", (e) => {
   }
 })
 
+}
