@@ -34,12 +34,12 @@ const googleLogin = async () => {
         profileComplete: false
       };
       await userRef.set(data)
-    }else{
+    } else {
       data = snap.data()
     }
-    if(!data.contact){
+    if (!data.contact) {
       window.location.href = "complete_profile.html"
-    }else{
+    } else {
       window.location.href = 'index.html'
     }
   }
@@ -48,18 +48,18 @@ const googleLogin = async () => {
   }
 }
 
-document.getElementById("googleSignInRegister")?.addEventListener("click",googleLogin);
-document.getElementById("googleSignInLogin")?.addEventListener("click",googleLogin);
+document.getElementById("googleSignInRegister")?.addEventListener("click", googleLogin);
+document.getElementById("googleSignInLogin")?.addEventListener("click", googleLogin);
 
 // Register (Auth + Firestore)
 
 const register = () => {
-const name = document.getElementById("name")?.value || "";
-const email = document.getElementById("email")?.value || "";
-const password = document.getElementById("password")?.value || "";
-const contact = document.getElementById("contact")?.value || "";
-const emergencyContact = document.getElementById("emergencyContact")?.value || "";
-const role = document.getElementById("role")?.value || "patient";
+  const name = document.getElementById("name")?.value || "";
+  const email = document.getElementById("email")?.value || "";
+  const password = document.getElementById("password")?.value || "";
+  const contact = document.getElementById("contact")?.value || "";
+  const emergencyContact = document.getElementById("emergencyContact")?.value || "";
+  const role = document.getElementById("role")?.value || "patient";
 
   auth.createUserWithEmailAndPassword(email, password)
     .then((userCredential) => {
@@ -75,15 +75,22 @@ const role = document.getElementById("role")?.value || "patient";
       });
 
     })
-    .then(() => {
+    .then(async () => {
       alert("Registration successful!");
-      if(role === "admin"){
+      if (role === "admin") {
         window.location.href = "admin.html";
       }
-      else if(role === "ambulanceDriver") {
+      else if (role === "ambulanceDriver") {
+        await db.collection("ambulances").add({
+          driverName: name,
+          contact: contact,
+          location: { lat: 0, lng: 0 },
+          status: "Available",
+          userId: user.uid
+        })
         window.location.href = "driver.html";
       }
-      else{
+      else {
         window.location.href = "index.html";
       }
     })
@@ -96,31 +103,31 @@ const role = document.getElementById("role")?.value || "patient";
 
 const login = async () => {
 
-const email = document.getElementById("loginEmail").value;
-const password = document.getElementById("loginPassword").value;
+  const email = document.getElementById("loginEmail").value;
+  const password = document.getElementById("loginPassword").value;
 
-try {
+  try {
 
-const userCredential = await auth.signInWithEmailAndPassword(email,password);
-const user = userCredential.user;
+    const userCredential = await auth.signInWithEmailAndPassword(email, password);
+    const user = userCredential.user;
 
-const snap = await db.collection("users").doc(user.uid).get();
-const role = snap.data().role;
+    const snap = await db.collection("users").doc(user.uid).get();
+    const role = snap.data().role;
 
-if(role === "ambulanceDriver"){
-window.location.href = "driver.html";
-}
-else if(role === "admin"){
-window.location.href = "admin.html";
-}
-else{
-window.location.href = "index.html";
-}
+    if (role === "ambulanceDriver") {
+      window.location.href = "driver.html";
+    }
+    else if (role === "admin") {
+      window.location.href = "admin.html";
+    }
+    else {
+      window.location.href = "index.html";
+    }
 
-}
-catch(error){
-alert(error.message);
-}
+  }
+  catch (error) {
+    alert(error.message);
+  }
 
 };
 // Form submit handlers (Register and Login pages)
@@ -128,8 +135,8 @@ alert(error.message);
 document.addEventListener("DOMContentLoaded", () => {
 
   const registerForm = document.getElementById("registerForm");
-  if(registerForm){
-    registerForm.addEventListener("submit",(e)=>{
+  if (registerForm) {
+    registerForm.addEventListener("submit", (e) => {
       e.preventDefault();
       register();
     })
@@ -137,89 +144,89 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const loginForm = document.getElementById("login-form");
 
-  if(loginForm){
-    loginForm.addEventListener("submit",(e)=>{
+  if (loginForm) {
+    loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
       login();
     })
   }
 
-auth.onAuthStateChanged(async (user) => {
+  auth.onAuthStateChanged(async (user) => {
 
-  const dropdownName = document.getElementById("dropdownName");
-  const dropdownEmail = document.getElementById("dropdownEmail");
-  const dropdownPhone = document.getElementById('dropdownPhone')
-  const dropdownEmergency = document.getElementById('dropdownEmergency')
-  const avatarCircle = document.getElementById("avatarCircle");
-  const profileWrapper = document.getElementById("profileWrapper");
-  const loginLinks = document.getElementById("loginLinks");
-  const logoutBtn = document.getElementById("logoutBtn");
-  const dropdownMenu = document.getElementById("dropdownMenu");
+    const dropdownName = document.getElementById("dropdownName");
+    const dropdownEmail = document.getElementById("dropdownEmail");
+    const dropdownPhone = document.getElementById('dropdownPhone')
+    const dropdownEmergency = document.getElementById('dropdownEmergency')
+    const avatarCircle = document.getElementById("avatarCircle");
+    const profileWrapper = document.getElementById("profileWrapper");
+    const loginLinks = document.getElementById("loginLinks");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const dropdownMenu = document.getElementById("dropdownMenu");
 
-  if (!user) {
-    if (profileWrapper) profileWrapper.style.display = "none";
-    if (loginLinks) loginLinks.style.display = "block";
-    return;
-  }
-
-  try {
-
-    const snap = await db.collection("users").doc(user.uid).get();
-    const data = snap.exists ? snap.data() : {};
-
-    if (dropdownName) {
-      dropdownName.textContent = data.name || user.displayName || "User";
+    if (!user) {
+      if (profileWrapper) profileWrapper.style.display = "none";
+      if (loginLinks) loginLinks.style.display = "block";
+      return;
     }
 
-    if (dropdownEmail) {
-      dropdownEmail.textContent = data.email || user.email || "";
+    try {
+
+      const snap = await db.collection("users").doc(user.uid).get();
+      const data = snap.exists ? snap.data() : {};
+
+      if (dropdownName) {
+        dropdownName.textContent = data.name || user.displayName || "User";
+      }
+
+      if (dropdownEmail) {
+        dropdownEmail.textContent = data.email || user.email || "";
+      }
+
+      if (dropdownPhone) {
+        dropdownPhone.textContent = "phone: " + (data.contact ? data.contact : "Not added")
+      }
+
+      if (dropdownEmergency) {
+        dropdownEmergency.textContent = "Emergency: " + (data.emergencyContact || "N/A")
+      }
+      if (avatarCircle) {
+        avatarCircle.src =
+          user.photoURL ||
+          "https://ui-avatars.com/api/?name=" + (user.email || "User");
+      }
+
+      if (profileWrapper) profileWrapper.style.display = "block";
+      if (loginLinks) loginLinks.style.display = "none";
+
+      if (logoutBtn) {
+        logoutBtn.onclick = async () => {
+          await auth.signOut();
+          window.location.href = "index.html";
+        };
+      }
+
+      /* DROPDOWN TOGGLE */
+
+      if (avatarCircle && dropdownMenu) {
+
+        avatarCircle.addEventListener("click", (e) => {
+          e.stopPropagation();
+          dropdownMenu.classList.toggle("show");
+        });
+
+        document.addEventListener("click", (e) => {
+          if (profileWrapper && !profileWrapper.contains(e.target)) {
+            dropdownMenu.classList.remove("show");
+          }
+        });
+
+      }
+
+    } catch (error) {
+      console.error(error);
     }
 
-    if (dropdownPhone) {
-      dropdownPhone.textContent = "phone: " + (data.contact ? data.contact: "Not added")
-    }
-
-    if(dropdownEmergency){
-      dropdownEmergency.textContent = "Emergency: " + (data.emergencyContact || "N/A")
-    }
-    if (avatarCircle) {
-      avatarCircle.src =
-        user.photoURL ||
-        "https://ui-avatars.com/api/?name=" + (user.email || "User");
-    }
-
-    if (profileWrapper) profileWrapper.style.display = "block";
-    if (loginLinks) loginLinks.style.display = "none";
-
-    if (logoutBtn) {
-      logoutBtn.onclick = async () => {
-        await auth.signOut();
-        window.location.href = "index.html";
-      };
-    }
-
-    /* DROPDOWN TOGGLE */
-
-    if (avatarCircle && dropdownMenu) {
-
-      avatarCircle.addEventListener("click", (e) => {
-        e.stopPropagation();
-        dropdownMenu.classList.toggle("show");
-      });
-
-      document.addEventListener("click", (e) => {
-        if (profileWrapper && !profileWrapper.contains(e.target)) {
-          dropdownMenu.classList.remove("show");
-        }
-      });
-
-    }
-
-  } catch (error) {
-    console.error(error);
-  }
-
-});
+  });
 
 });
 
