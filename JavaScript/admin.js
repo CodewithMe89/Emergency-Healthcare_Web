@@ -25,40 +25,47 @@ auth.onAuthStateChanged(async (user) => {
     }
 });
 
-const docs = snapshot.docs.sort((a, b) => {
-  return a.data().status === "Pending" ? -1 : 1;
-});
-
 db.collection('emergencies')
-    .onSnapshot(snapshot => {
-        const container = document.getElementById('emergencyList')
+.onSnapshot(snapshot => {
 
-        snapshot.forEach(doc => {
-            const data = doc.data()
+    const container = document.getElementById('emergencyList');
+    container.innerHTML = "";
 
-            const div = document.createElement('div')
-            div.className = "card"
-            div.innerHTML = `
+    const docs = snapshot.docs.sort((a, b) => {
+        return a.data().status === "Pending" ? -1 : 1;
+    });
+
+    docs.forEach(doc => {
+
+        const data = doc.data();
+
+        const lat = data.location?.lat || "N/A";
+        const lng = data.location?.lng || "N/A";
+
+        const div = document.createElement('div');
+        div.className = "card";
+
+        div.innerHTML = `
         <div class="card-header">
-        <span class="name">${data.name}</span>
-        <span class="status ${data.status.toLowerCase()} ">${data.status}</span>
+            <span class="name">${data.name}</span>
+            <span class="status ${data.status.toLowerCase()}">${data.status}</span>
         </div>
 
         <div class="card-body">
-        <p>📞 ${data.contact}</p>
-        <p> 📍 Lat: ${data.location.lat || "N/A"}, Lng: ${data.location.lng || "N/A"}</p>
+            <p>📞 ${data.contact}</p>
+            <p>📍 Lat: ${lat}, Lng: ${lng}</p>
         </div>
 
         <div class="card-actions">
-        <button onclick="assignAmbulance('${doc.id}', ${data.location?.lat || 0}, ${data.location?.lng || 0})">
-        Assign
-        </button>
-        <button onclick="markComplete('${doc.id}')">Complete</button>
+            <button onclick="assignAmbulance('${doc.id}', ${lat || 0}, ${lng || 0})">Assign</button>
+            <button onclick="markComplete('${doc.id}')">Complete</button>
+        </div>
         `;
 
-            container.appendChild(div)
-        })
-    })
+        container.appendChild(div);
+    });
+
+});
 //Ambulance list
 db.collection("ambulances")
     .onSnapshot(snapshot => {
