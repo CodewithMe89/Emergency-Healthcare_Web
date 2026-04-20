@@ -106,7 +106,7 @@ const register = () => {
   .catch((error) => {
     alert(error.message);
   });
-
+}
 // Login
 
 const login = async () => {
@@ -256,5 +256,3 @@ document.addEventListener("click", (e) => {
     e.target.textContent = "Visibility";
   }
 })
-
-}
