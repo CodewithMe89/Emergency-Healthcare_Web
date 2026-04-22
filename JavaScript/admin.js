@@ -12,12 +12,6 @@ auth.onAuthStateChanged(async (user) => {
 
     const role = snap.data().role.trim();
 
-    // if(!snap.exists){
-    //     alert("User Data not Found")
-    //     window.location.href = "Login.html"
-    //     return;
-    // }
-
     if (role !== "admin") {
         alert("Access denied: Not an admin")
         window.location.href = "index.html"
@@ -121,13 +115,15 @@ async function assignAmbulance(emergencyId, lat, lng) {
 
     snapshot.forEach(doc => {
         const amb = doc.data()
+        const ambLat = amb.location?.lat || 0;
+        const ambLng = amb.location?.lng || 0;
 
         if (amb.status === "Available") {
             const dist = getDistance(
                 lat,
                 lng,
-                amb.location.lat,
-                amb.location.lng
+                ambLat,
+                ambLng
             );
             if (dist < minDistance) {
                 minDistance = dist;

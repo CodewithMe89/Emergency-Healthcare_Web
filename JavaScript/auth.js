@@ -87,7 +87,7 @@ const register = () => {
 
     else if (role === "ambulanceDriver") {
 
-      await db.collection("ambulances").add({
+      await db.collection('ambulances').doc(user.uid).set({
         driverName: name,
         contact: contact,
         location: { lat: 0, lng: 0 },
