@@ -10,7 +10,7 @@ auth.onAuthStateChanged(async (user) => {
 
     const snap = await db.collection("users").doc(user.uid).get();
 
-    const role = snap.data().role;
+    const role = snap.data().role.trim();
 
     // if(!snap.exists){
     //     alert("User Data not Found")
@@ -93,7 +93,7 @@ db.collection("ambulances")
     })
 
     async function markComplete(emergencyId){
-        await db.collection("emergencies").doc(id).update({
+        await db.collection("emergencies").doc(emergencyId).update({
             status: "Completed"
         })
     }
