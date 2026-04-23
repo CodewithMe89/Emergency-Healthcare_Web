@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Emergency Healthcare | admin</title>
     <link rel="stylesheet" href="CSS/admin.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://www.gstatic.com/firebasejs/12.4.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/12.4.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore-compat.js"></script>
@@ -18,8 +19,12 @@
     <h2>Ambualances</h2>
     <div id="ambulanceList"></div>
 
+    <h2>Live Map</h2>
+    <div id="map" style="height: 400px; margin: 10px;"></div>
+
     <script src="JavaScript/firebase.js"></script>
     <script src="JavaScript/admin.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </body>
 
 </html>

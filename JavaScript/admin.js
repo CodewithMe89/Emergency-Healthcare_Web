@@ -148,3 +148,59 @@ async function assignAmbulance(emergencyId, lat, lng) {
     })
     alert("Ambulance Assinged!")
 }
+
+//Map add
+let map = L.map('map').setView([28.6319,77.2090],12); 
+L.titleLayer('https://{s}.title.openstreetmap.org/{z}/{x}/{y}.png',{
+    attribution: '&copy OpenStreetMap contributors'
+}).addTo(map);
+
+let ambulanceMarkers = {};
+let emergencyMarkers = {};
+
+db.collection("ambulances")
+.onSnapshot(snapshot => {
+    snapshot.forEach(doc => {
+        const data = doc.data();
+        const lat = data.location?.lat;
+        const lng = data.location?.lng;
+
+        if(!lat || !lng) return;
+
+        if(ambulanceMarkers[doc.id]){
+            ambulanceMarkers[doc.id].setLatLng([lat,lng]);
+        }else{
+            const marker = L.marker([lat,lng])
+            .addTo(map)
+            .bindPopup(`🚑 ${data.driverName}`);
+
+            ambulanceMarkers[doc.id] = marker;
+        }
+    });
+});
+
+db.collection("emergencies")
+.onSnapshot(snapshot => {
+    snapshot.forEach(doc => {
+        const data = doc.data();
+        const lat = data.location?.lat;
+        const lng = data.location?.lng;
+
+        if(!lat || !lng) return;
+
+        if(emergencyMarkers[doc.id]){
+            emergencyMarkers[doc.id].setLatLng([lat,lng]);
+        }else{
+            const marker = L.marker([lat,lng],{
+                icon: L.divIcon({
+                    iconUrl: "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
+                    iconSize: [32,32]
+                })
+            })
+            .addTo(map)
+            .bindPopup(`🚨 ${data.name}`)
+
+            emergencyMarkers[doc.id] = marker;
+        }
+    })
+})
