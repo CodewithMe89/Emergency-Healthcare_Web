@@ -1,90 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>First Aid</title>
+  <meta name="theme-color" content="#173b72" />
+  <meta name="description" content="Quick first aid guidance to help you respond while professional emergency help is on the way." />
+  <title>First Aid Guides | Emergency Healthcare</title>
+
+  <!-- Keep the project's existing shared stylesheet and report styles. -->
   <link rel="stylesheet" href="CSS/style.css" />
-  <link rel="stylesheet" href="CSS/report.css" /><!-- optional card styles -->
+  <link rel="stylesheet" href="CSS/report.css" />
+  <!-- Page-specific styles load last so they can safely override shared styles. -->
+  <link rel="stylesheet" href="CSS/first_aid_modern.css" />
+
   <script src="https://www.gstatic.com/firebasejs/12.4.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/12.4.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore-compat.js"></script>
   <script src="auth.js" defer></script>
 </head>
-
-<body>
+<body class="first-aid-page">
   <header class="header">
-    <div class="logo"><a href="index.html"><img src="Images/logo.png" alt="logo" /></a></div>
-    <nav>
+    <div class="logo">
+      <a href="index.html" aria-label="Emergency Healthcare home">
+        <img src="Images/logo.png" alt="Emergency Healthcare logo" />
+      </a>
+    </div>
+
+    <nav class="primary-nav" aria-label="Main navigation">
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="Hospital.html">Hospitals</a></li>
-        <li><a href="first_aid.html">First Aid</a></li>
+        <li><a href="first_aid.html" aria-current="page">First Aid</a></li>
         <li class="new-item auth-container">
           <div class="profile-wrapper" id="profileWrapper">
-            <img id="avatarCircle" class="avatar-img" src="" alt="profile">
+            <img id="avatarCircle" class="avatar-img" src="" alt="Profile" />
             <div class="dropdown-menu" id="dropdownMenu">
-
               <div class="user-info">
                 <strong id="dropdownName"></strong>
                 <small id="dropdownEmail"></small>
               </div>
-              <hr>
-              <button id="logoutBtn">Logout</button>
+              <hr />
+              <button id="logoutBtn" type="button">Logout</button>
             </div>
           </div>
-
           <div id="loginLinks">
             <a href="Login.html" class="nav-login">Login</a>
             <a href="Register.html" class="nav-register">Register</a>
           </div>
-            
         </li>
       </ul>
     </nav>
   </header>
 
-  <main class="container" style="margin:24px 0 56px;">
-    <section class="card" style="padding:20px; margin-bottom:16px;">
-      <h1 style="margin:0 0 8px; color:#183a75;">First Aid Guides</h1>
-      <p style="margin:0; color:#5a6ea8;">Quick, life‑saving steps to follow before professional help arrives.</p>
+  <main class="first-aid-container">
+    <section class="first-aid-hero" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <span class="eyebrow"><span class="eyebrow-dot"></span> EMERGENCY HEALTHCARE</span>
+        <h1 id="page-title">First Aid Guides</h1>
+        <p>Clear, practical steps to follow while professional help is on the way.</p>
+        <div class="hero-note">
+          <span class="note-icon" aria-hidden="true">i</span>
+          <span>In a life-threatening emergency, contact local emergency services immediately.</span>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <div class="visual-ring ring-one"></div>
+        <div class="visual-ring ring-two"></div>
+        <div class="medical-cross">+</div>
+        <div class="visual-caption">Be prepared. Act quickly.</div>
+      </div>
     </section>
 
-    <!-- Guides -->
-    <section class="card" style="padding:0;">
-      <details open style="padding:16px 20px; border-bottom:1px solid #ecf1fb;">
-        <summary style="font-weight:700; color:#183a75; cursor:pointer;">Severe bleeding</summary>
-        <ul style="margin:10px 0 0 16px;">
-          <li>Apply firm, direct pressure with a clean cloth for at least 5 minutes.</li>
-          <li>Elevate the injured area if possible; do not remove soaked cloth, add another layer.</li>
-          <li>If bleeding doesn’t stop, use a tourniquet above the wound and call emergency services.</li>
-        </ul>
-      </details>
+    <section class="guides-section" aria-labelledby="guides-title">
+      <div class="section-heading">
+        <div>
+          <span class="section-kicker">QUICK REFERENCE</span>
+          <h2 id="guides-title">First aid essentials</h2>
+        </div>
+        <p>Choose a situation to view the steps.</p>
+      </div>
 
-      <details style="padding:16px 20px; border-bottom:1px solid #ecf1fb;">
-        <summary style="font-weight:700; color:#183a75; cursor:pointer;">Unconscious but breathing</summary>
-        <ul style="margin:10px 0 0 16px;">
-          <li>Place in recovery position on their side, keep airway open.</li>
-          <li>Check breathing regularly; keep warm; do not give food or drink.</li>
-          <li>Call emergency services and monitor until help arrives.</li>
-        </ul>
-      </details>
+      <div class="guides-list">
+        <details class="guide-item" open>
+          <summary>
+            <span class="guide-icon bleeding-icon" aria-hidden="true">!</span>
+            <span class="guide-title-wrap">
+              <span class="guide-title">Severe bleeding</span>
+              <span class="guide-subtitle">Control blood loss and get urgent help</span>
+            </span>
+            <span class="summary-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="guide-content">
+            <ol>
+              <li>Apply firm, direct pressure to the wound using a clean cloth or dressing.</li>
+              <li>If blood soaks through, keep pressure on the wound and add another dressing rather than removing the first.</li>
+              <li>Call emergency services for severe or uncontrolled bleeding. For life-threatening limb bleeding, use a commercial tourniquet if available and you know how to use it; follow emergency-dispatch instructions.</li>
+            </ol>
+            <p class="guide-caution"><strong>Important:</strong> Do not delay emergency help for severe bleeding.</p>
+          </div>
+        </details>
 
-      <details style="padding:16px 20px;">
-        <summary style="font-weight:700; color:#183a75; cursor:pointer;">Burns</summary>
-        <ul style="margin:10px 0 0 16px;">
-          <li>Cool the burn under running water for 20 minutes.</li>
-          <li>Do not apply ice, butter, or toothpaste; cover loosely with clean cloth.</li>
-          <li>Seek medical help for large/deep burns or if face/hands/genitals are affected.</li>
-        </ul>
-      </details>
+        <details class="guide-item">
+          <summary>
+            <span class="guide-icon breathing-icon" aria-hidden="true">♡</span>
+            <span class="guide-title-wrap">
+              <span class="guide-title">Unconscious but breathing</span>
+              <span class="guide-subtitle">Protect the airway and monitor breathing</span>
+            </span>
+            <span class="summary-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="guide-content">
+            <ol>
+              <li>Call emergency services and check that the person is breathing normally.</li>
+              <li>If there is no suspected spinal injury, place them in the recovery position and keep their airway open.</li>
+              <li>Keep checking their breathing, keep them warm, and do not give food or drink.</li>
+              <li>If breathing becomes absent or abnormal, follow the emergency operator's instructions and start CPR if advised and able.</li>
+            </ol>
+            <p class="guide-caution"><strong>Important:</strong> If a serious neck or back injury is suspected, avoid unnecessary movement unless needed to keep the airway open or perform CPR.</p>
+          </div>
+        </details>
+
+        <details class="guide-item">
+          <summary>
+            <span class="guide-icon burns-icon" aria-hidden="true">✳</span>
+            <span class="guide-title-wrap">
+              <span class="guide-title">Burns</span>
+              <span class="guide-subtitle">Cool the area and protect the skin</span>
+            </span>
+            <span class="summary-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="guide-content">
+            <ol>
+              <li>Cool the burn under cool or lukewarm running water for 20 minutes as soon as possible.</li>
+              <li>Remove jewellery and clothing near the burn if it is not stuck to the skin.</li>
+              <li>Do not use ice, butter, toothpaste, or creams. After cooling, cover loosely with a sterile non-stick dressing or clean material.</li>
+              <li>Seek urgent medical care for large or deep burns, chemical or electrical burns, or burns affecting the face, hands, feet, or genitals.</li>
+            </ol>
+            <p class="guide-caution"><strong>Important:</strong> Do not pull away material stuck to the burn.</p>
+          </div>
+        </details>
+      </div>
     </section>
 
-    <section class="card" style="padding:16px 20px; margin-top:16px;">
-      <a class="btn btn-primary" href="index.html#sos-area">Need urgent help? Press SOS</a>
+    <section class="urgent-panel" aria-label="Emergency help">
+      <div class="urgent-mark" aria-hidden="true">!</div>
+      <div class="urgent-copy">
+        <h2>Need urgent help?</h2>
+        <p>Open the emergency SOS section to request help.</p>
+      </div>
+      <a class="urgent-button" href="index.html#sos-area">Go to SOS <span aria-hidden="true">→</span></a>
     </section>
+
+    <p class="medical-disclaimer">This page is for general guidance only and is not a substitute for professional medical training or emergency care.</p>
   </main>
+
   <script src="JavaScript/firebase.js"></script>
   <script src="JavaScript/auth.js"></script>
 </body>
